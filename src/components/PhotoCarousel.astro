@@ -1,0 +1,288 @@
+---
+export interface Props {
+  photos: string[];
+  alt?: string;
+}
+
+const { photos, alt } = Astro.props;
+---
+
+<div class="photo-carousel" data-carousel>
+  <div class="carousel-track">
+    {photos.map((src, index) => (
+      <div class="carousel-slide" data-index={index}>
+        <img src={src} alt={alt ? `${alt} ${index + 1}` : ''} loading={index === 0 ? 'eager' : 'lazy'} />
+      </div>
+    ))}
+  </div>
+
+  <button class="carousel-prev" type="button" aria-label="Previous photo">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+  </button>
+
+  <button class="carousel-next" type="button" aria-label="Next photo">
+    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+  </button>
+
+  <div class="carousel-dots">
+    {photos.map((_, index) => (
+      <button class="carousel-dot" data-index={index} type="button" aria-label={`Photo ${index + 1}`}></button>
+    ))}
+  </div>
+
+  <dialog class="lightbox" aria-label="Photo viewer">
+    <button class="lightbox-close" type="button" aria-label="Close photo viewer">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
+      Close
+    </button>
+    <button class="lightbox-prev" type="button" aria-label="Previous photo">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      Previous
+    </button>
+    <div class="polaroid">
+      <img src="" alt="" />
+    </div>
+    <button class="lightbox-next" type="button" aria-label="Next photo">
+      Next
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+    </button>
+    <p class="lightbox-counter"></p>
+  </dialog>
+</div>
+
+<style>
+  .photo-carousel {
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 400ms ease;
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    line-height: 0;
+  }
+
+  .carousel-slide img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16 / 10;
+    object-fit: contain;
+  }
+
+  .carousel-prev,
+  .carousel-next {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 253, 250, 0.85);
+    color: var(--ink);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .photo-carousel:hover .carousel-prev,
+  .photo-carousel:hover .carousel-next {
+    opacity: 1;
+  }
+
+  .carousel-prev { left: 0.5rem; }
+  .carousel-next { right: 0.5rem; }
+
+  .carousel-prev:hover,
+  .carousel-next:hover {
+    background: #fff;
+  }
+
+  .carousel-dots {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 50%;
+    translate: -50% 0;
+    display: flex;
+    gap: 0.35rem;
+    z-index: 2;
+  }
+
+  .carousel-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 253, 250, 0.5);
+    cursor: pointer;
+    transition: background 200ms ease;
+  }
+
+  .carousel-dot[aria-current] {
+    background: rgba(255, 253, 250, 0.9);
+  }
+
+  .carousel-dot:hover {
+    background: rgba(255, 253, 250, 0.75);
+  }
+
+  .lightbox {
+    width: min(1000px, calc(100% - 2rem));
+    border: 0;
+    padding: 1rem;
+    background: transparent;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(21, 19, 15, 0.85);
+  }
+
+  .lightbox[open] {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .lightbox .polaroid img {
+    display: block;
+    max-height: 70vh;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .lightbox button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 0.55rem 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    transition: color 180ms ease;
+  }
+
+  .lightbox button:hover {
+    color: var(--accent);
+  }
+
+  .lightbox .lightbox-close {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+
+  .lightbox-counter {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 680px) {
+    .lightbox[open] {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .lightbox .polaroid {
+      padding: .5rem .5rem 1.5rem;
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .lightbox-prev,
+    .lightbox-next {
+      grid-row: 3;
+    }
+
+    .lightbox-next {
+      justify-content: flex-end;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-carousel]').forEach((el) => {
+    const track = el.querySelector('.carousel-track');
+    const slides = el.querySelectorAll('.carousel-slide');
+    const images = el.querySelectorAll('.carousel-slide img');
+    const prevBtn = el.querySelector('.carousel-prev');
+    const nextBtn = el.querySelector('.carousel-next');
+    const dots = el.querySelectorAll('.carousel-dot');
+    const dialog = el.querySelector('.lightbox');
+    const lightboxImg = dialog?.querySelector('.polaroid img');
+    const counter = dialog?.querySelector('.lightbox-counter');
+    const closeBtn = dialog?.querySelector('.lightbox-close');
+    const lightboxPrev = dialog?.querySelector('.lightbox-prev');
+    const lightboxNext = dialog?.querySelector('.lightbox-next');
+
+    let current = 0;
+
+    function go(index) {
+      if (!track || slides.length === 0) return;
+      current = (index + slides.length) % slides.length;
+      track.style.transform = `translateX(-${current * 100}%)`;
+      dots.forEach((dot, i) => {
+        dot.toggleAttribute('aria-current', i === current);
+      });
+    }
+
+    function lockScroll(lock) {
+      document.body.style.overflow = lock ? 'hidden' : '';
+    }
+
+    function showLightbox(index) {
+      if (!dialog || !lightboxImg || !counter || images.length === 0) return;
+      current = (index + images.length) % images.length;
+      lightboxImg.src = images[current].src;
+      counter.textContent = `${current + 1} / ${images.length}`;
+      if (!dialog.open) {
+        lockScroll(true);
+        dialog.showModal();
+      }
+    }
+
+    images.forEach((img, i) => {
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', () => showLightbox(i));
+    });
+
+    prevBtn?.addEventListener('click', () => go(current - 1));
+    nextBtn?.addEventListener('click', () => go(current + 1));
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => go(parseInt(dot.dataset.index || '0')));
+    });
+
+    closeBtn?.addEventListener('click', () => { dialog?.close(); lockScroll(false); });
+    lightboxPrev?.addEventListener('click', () => showLightbox(current - 1));
+    lightboxNext?.addEventListener('click', () => showLightbox(current + 1));
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) { dialog.close(); lockScroll(false); }
+    });
+    dialog?.addEventListener('close', () => lockScroll(false));
+    document.addEventListener('keydown', (event) => {
+      if (!dialog?.open) return;
+      if (event.key === 'ArrowLeft') showLightbox(current - 1);
+      if (event.key === 'ArrowRight') showLightbox(current + 1);
+    });
+  });
+</script>

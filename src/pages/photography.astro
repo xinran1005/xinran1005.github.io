@@ -18,7 +18,7 @@ interface AlbumWithPhotos {
 
 const albums: AlbumWithPhotos[] = photographyAlbums
   .map((album) => {
-    const dir = path.join(photosDir, album.subfolder);
+    const dir = path.join(photosDir, album.albumFolder);
     if (!fs.existsSync(dir)) return null;
     const files = fs
       .readdirSync(dir)
@@ -27,8 +27,8 @@ const albums: AlbumWithPhotos[] = photographyAlbums
     if (files.length === 0) return null;
     return {
       ...album,
-      cover: `/photos/${album.subfolder}/${files[0]}`,
-      photos: files.map((f) => `/photos/${album.subfolder}/${f}`),
+      cover: `/photos/${album.albumFolder}/${files[0]}`,
+      photos: files.map((f) => `/photos/${album.albumFolder}/${f}`),
     };
   })
   .filter((a): a is AlbumWithPhotos => a !== null);

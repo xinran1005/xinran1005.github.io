@@ -81,13 +81,13 @@ export const videoProjects = [
 ];
 
 export const photographyAlbums = [
-  { id: '1', title: 'Burrard Street', href: '#album-1', subfolder: '1', description: 'Street scenes along Burrard Street.' },
-  { id: '2', title: 'Rainy Windows', href: '#album-2', subfolder: '2', description: 'Reflections and droplets on glass.' },
-  { id: '3', title: 'Portraits', href: '#album-3', subfolder: '3', description: 'Candid and posed portrait studies.' },
-  { id: '4', title: 'Urban Geometry', href: '#album-4', subfolder: '4', description: 'Lines, patterns, and architectural forms.' },
-  { id: '5', title: 'Night Frames', href: '#album-5', subfolder: '5', description: 'City lights and low-light moments.' },
-  { id: '6', title: 'Transit', href: '#album-6', subfolder: '6', description: 'On buses, trains, and platforms.' },
-  { id: '7', title: 'Fragments', href: '#album-7', subfolder: '7', description: 'Close-ups and abstract details.' },
+  { id: '1', title: 'Burrard Street', href: '#album-1', albumFolder: '1', description: 'Street scenes along Burrard Street.' },
+  { id: '2', title: 'Rainy Windows', href: '#album-2', albumFolder: '2', description: 'Reflections and droplets on glass.' },
+  { id: '3', title: 'Portraits', href: '#album-3', albumFolder: '3', description: 'Candid and posed portrait studies.' },
+  { id: '4', title: 'Urban Geometry', href: '#album-4', albumFolder: '4', description: 'Lines, patterns, and architectural forms.' },
+  { id: '5', title: 'Night Frames', href: '#album-5', albumFolder: '5', description: 'City lights and low-light moments.' },
+  { id: '6', title: 'Transit', href: '#album-6', albumFolder: '6', description: 'On buses, trains, and platforms.' },
+  { id: '7', title: 'Fragments', href: '#album-7', albumFolder: '7', description: 'Close-ups and abstract details.' },
 ];
 
 export const designSections = [
@@ -132,17 +132,17 @@ export const designSections = [
     description: 'Print, cover, and motion-support assets for visual communication.',
     projects: [
       {
-        title: 'Poster Design',
-        image: '/Design.jpg',
-        status: 'Project details coming soon',
+        title: 'Holland Festival',
+        albumFolder: 'p1',
+        status: 'Poster Design',
         description:
-          'Poster work including Holland Festival and SS Global Streaming & Sourcing Worldwide concepts.',
+          'Poster work for Holland Festival',
       },
       {
-        title: 'Album Cover',
-        image: '/Design.jpg',
-        status: 'Project list coming soon',
-        description: 'Cover concepts for music and editorial presentation.',
+        title: 'SS Global Streaming & Sourcing Worldwide',
+        albumFolder: 'p2',
+        status: 'Poster Design',
+        description: 'SS Global Streaming & Sourcing Worldwide during The China Import and Export Fair',
       },
       {
         title: '2D Assets in Video',

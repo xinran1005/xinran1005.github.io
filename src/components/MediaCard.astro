@@ -1,7 +1,10 @@
 ---
+import PhotoCarousel from './PhotoCarousel.astro';
+
 export interface Props {
   type: 'video' | 'image';
   image?: string;
+  photos?: string[];
   youtubeId?: string;
   playerId: string;
   title: string;
@@ -12,7 +15,7 @@ export interface Props {
   linkLabel?: string;
 }
 
-const { type, image, youtubeId, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
+const { type, image, photos, youtubeId, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
 const origin = Astro.url.origin;
 ---
 
@@ -27,6 +30,8 @@ const origin = Astro.url.origin;
           title={title}
         ></iframe>
       </div>
+    ) : photos ? (
+      <PhotoCarousel photos={photos} />
     ) : (
       image && <img src={image} alt="" loading="lazy" />
     )}
@@ -58,8 +63,7 @@ const origin = Astro.url.origin;
   }
 
   .media-frame {
-    background: var(--ink);
-    box-shadow: var(--shadow);
+    background: var(--bg);
   }
 
   .media-frame img {

@@ -1,8 +1,42 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
 import 'plyr/dist/plyr.css';
 import Layout from '../layouts/Layout.astro';
 import MediaCard from '../components/MediaCard.astro';
 import { designSections } from '../data/portfolio';
+
+const photosDir = path.join(process.cwd(), 'public', 'photos');
+
+interface DesignProject {
+  title: string;
+  image?: string;
+  albumFolder?: string;
+  youtubeId?: string;
+  status: string;
+  description: string;
+  details?: string[];
+  link?: string;
+  linkLabel?: string;
+  photos?: string[];
+}
+
+function resolveProject(project: DesignProject): DesignProject {
+  if (project.albumFolder) {
+    const dir = path.join(photosDir, project.albumFolder);
+    if (fs.existsSync(dir)) {
+      const files = fs
+        .readdirSync(dir)
+        .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f))
+        .sort()
+        .map((f) => `/photos/${project.albumFolder}/${f}`);
+      if (files.length > 0) {
+        return { ...project, photos: files };
+      }
+    }
+  }
+  return project;
+}
 ---
 
 <Layout title="Design" description="UI/UX and graphic design works organized by discipline." currentPath="/design/">
@@ -20,20 +54,24 @@ import { designSections } from '../data/portfolio';
           </div>
 
           <div class="design-list">
-            {section.projects.map((project, index) => (
-              <MediaCard
-                type={project.youtubeId ? 'video' : 'image'}
-                image={project.image}
-                youtubeId={project.youtubeId}
-                playerId={`design-${index}`}
-                title={project.title}
-                kicker={project.status}
-                description={project.description}
-                details={project.details}
-                link={project.link}
-                linkLabel={project.linkLabel}
-              />
-            ))}
+            {section.projects.map((project, index) => {
+              const p = resolveProject(project);
+              return (
+                <MediaCard
+                  type={project.youtubeId ? 'video' : 'image'}
+                  image={p.image}
+                  photos={p.photos}
+                  youtubeId={p.youtubeId}
+                  playerId={`design-${index}`}
+                  title={p.title}
+                  kicker={p.status}
+                  description={p.description}
+                  details={p.details}
+                  link={p.link}
+                  linkLabel={p.linkLabel}
+                />
+              );
+            })}
           </div>
         </section>
       ))}
