@@ -1,0 +1,243 @@
+---
+export interface Props {
+  album: {
+    id: string;
+    title: string;
+    description: string;
+    photos: string[];
+  };
+}
+
+const { album } = Astro.props;
+const sectionId = `album-${album.id}`;
+---
+
+<section class="album-section" id={sectionId} data-photo-gallery={album.id} aria-labelledby={`${sectionId}-title`}>
+  <div class="album-heading">
+    <h2 id={`${sectionId}-title`} class="album-title">{album.title}</h2>
+    <p>{album.description}</p>
+  </div>
+
+  <div class="photo-grid">
+    {album.photos.map((src, index) => (
+      <button class="photo-button" data-src={src} data-index={index} aria-label={`${album.title} photo ${index + 1}`}>
+        <img src={src} alt="" loading="lazy" />
+      </button>
+    ))}
+  </div>
+
+  <dialog class="lightbox" aria-label="Photo viewer">
+    <button class="close" type="button" aria-label="Close photo viewer">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
+      Close
+    </button>
+    <button class="previous" type="button" aria-label="Previous photo">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      Previous
+    </button>
+    <div class="polaroid">
+      <img src="" alt="" />
+    </div>
+    <button class="next" type="button" aria-label="Next photo">
+      Next
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+    </button>
+    <p class="counter"></p>
+  </dialog>
+</section>
+
+<style>
+  .album-section {
+    padding-top: 2rem;
+  }
+
+  .album-heading {
+    margin-bottom: 2rem;
+  }
+
+  .album-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 400;
+  }
+
+  .album-heading p {
+    margin: 0.6rem 0 0;
+    color: var(--muted);
+  }
+
+  .photo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (min-width: 600px) {
+    .photo-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .photo-grid {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+  }
+
+  .photo-button {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: zoom-in;
+  }
+
+  .photo-button img {
+    width: 100%;
+    border: 1px solid var(--line);
+    transition: filter 180ms ease, transform 180ms ease;
+  }
+
+  .photo-button:hover img,
+  .photo-button:focus-visible img {
+    transform: translateY(-2px);
+  }
+
+  .photo-button:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .lightbox {
+    width: min(1000px, calc(100% - 2rem));
+    border: 0;
+    padding: 1rem;
+    background: transparent;
+  }
+
+  .lightbox::backdrop {
+    background: rgba(21, 19, 15, 0.85);
+  }
+
+  .lightbox[open] {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .lightbox .polaroid {
+    background: #fff;
+    padding: 1rem 1rem 3rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    justify-self: center;
+  }
+
+  .lightbox .polaroid img {
+    display: block;
+    max-height: 70vh;
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .lightbox button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 0.55rem 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    transition: color 180ms ease;
+  }
+
+  .lightbox button:hover {
+    color: var(--accent);
+  }
+
+  .lightbox .close {
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+
+  .counter {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: var(--muted);
+    text-align: center;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 680px) {
+    .lightbox[open] {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .lightbox .polaroid {
+      padding: .5rem .5rem 1.5rem;
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+
+    .previous,
+    .next {
+      grid-row: 3;
+    }
+
+    .next {
+      justify-content: flex-end;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll('[data-photo-gallery]').forEach((section) => {
+    const buttons = [...section.querySelectorAll('.photo-button')];
+    const dialog = section.querySelector('.lightbox');
+    const image = dialog?.querySelector('img');
+    const counter = dialog?.querySelector('.counter');
+    const close = dialog?.querySelector('.close');
+    const previous = dialog?.querySelector('.previous');
+    const next = dialog?.querySelector('.next');
+    let current = 0;
+
+    function lockScroll(lock) {
+      document.body.style.overflow = lock ? 'hidden' : '';
+    }
+
+    function show(index) {
+      if (!dialog || !image || !counter || buttons.length === 0) return;
+      current = (index + buttons.length) % buttons.length;
+      image.src = buttons[current].dataset.src || '';
+      counter.textContent = `${current + 1} / ${buttons.length}`;
+      if (!dialog.open) {
+        lockScroll(true);
+        dialog.showModal();
+      }
+    }
+
+    buttons.forEach((button, index) => {
+      button.addEventListener('click', () => show(index));
+    });
+
+    close?.addEventListener('click', () => { dialog?.close(); lockScroll(false); });
+    previous?.addEventListener('click', () => show(current - 1));
+    next?.addEventListener('click', () => show(current + 1));
+    dialog?.addEventListener('click', (event) => {
+      if (event.target === dialog) { dialog.close(); lockScroll(false); }
+    });
+    dialog?.addEventListener('close', () => lockScroll(false));
+    document.addEventListener('keydown', (event) => {
+      if (!dialog?.open) return;
+      if (event.key === 'ArrowLeft') show(current - 1);
+      if (event.key === 'ArrowRight') show(current + 1);
+    });
+  });
+</script>

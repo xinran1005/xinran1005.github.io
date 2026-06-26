@@ -1,0 +1,103 @@
+---
+import 'plyr/dist/plyr.css';
+import Layout from '../layouts/Layout.astro';
+import MediaCard from '../components/MediaCard.astro';
+import { designSections } from '../data/portfolio';
+---
+
+<Layout title="Design" description="UI/UX and graphic design works organized by discipline." currentPath="/design/">
+  <main class="page-shell">
+    <section class="page-title" aria-labelledby="design-title">
+      <p class="section-kicker">Design</p>
+    </section>
+
+    <div class="design-sections">
+      {designSections.map((section) => (
+        <section class="design-section">
+          <div class="section-heading">
+            <p class="section-kicker">{section.title}</p>
+            <h2>{section.description}</h2>
+          </div>
+
+          <div class="design-list">
+            {section.projects.map((project, index) => (
+              <MediaCard
+                type={project.youtubeId ? 'video' : 'image'}
+                image={project.image}
+                youtubeId={project.youtubeId}
+                playerId={`design-${index}`}
+                title={project.title}
+                kicker={project.status}
+                description={project.description}
+                details={project.details}
+                link={project.link}
+                linkLabel={project.linkLabel}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .page-title {
+    padding: 1rem 0;
+  }
+
+  .design-sections {
+    display: grid;
+    gap: clamp(3rem, 7vw, 6rem);
+    padding-bottom: clamp(3rem, 7vw, 6rem);
+  }
+
+  .design-section {
+    display: grid;
+    gap: 1.4rem;
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.3fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+    border-top: 1px solid var(--line);
+    padding-top: 1.2rem;
+  }
+
+  .section-heading h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.05;
+    text-align: end;
+  }
+
+  .design-list {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  :global(.plyr) {
+    --plyr-color-main: var(--accent);
+    height: 100%;
+  }
+
+  @media (max-width: 640px) {
+    .section-heading {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  import Plyr from 'plyr';
+
+  document.querySelectorAll('.plyr__video-embed').forEach((player) => {
+    new Plyr(player, {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+    });
+  });
+</script>

@@ -1,0 +1,60 @@
+---
+import 'plyr/dist/plyr.css';
+import Layout from '../layouts/Layout.astro';
+import MediaCard from '../components/MediaCard.astro';
+import { videoProjects } from '../data/portfolio';
+---
+
+<Layout title="Video" description="Narrative, documentary, and experimental video works." currentPath="/video/">
+  <main class="page-shell video-page">
+    <section class="page-title" aria-labelledby="video-title">
+      <p class="section-kicker">Video</p>
+    </section>
+
+    <section class="video-list" aria-label="Video projects">
+      {videoProjects.map((project, index) => (
+        <MediaCard
+          type="video"
+          youtubeId={project.youtubeId}
+          playerId={`player-${index}`}
+          title={project.title}
+          kicker={project.role}
+          description={project.intro}
+          details={project.details}
+          link={project.link}
+          linkLabel="Open on YouTube"
+        />
+      ))}
+    </section>
+  </main>
+</Layout>
+
+<style>
+  .video-page {
+    padding-bottom: 3rem;
+  }
+
+  .page-title {
+    padding: 1rem 0;
+  }
+
+  .video-list {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  :global(.plyr) {
+    --plyr-color-main: var(--accent);
+    height: 100%;
+  }
+</style>
+
+<script>
+  import Plyr from 'plyr';
+
+  document.querySelectorAll('.plyr__video-embed').forEach((player) => {
+    new Plyr(player, {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+    });
+  });
+</script>

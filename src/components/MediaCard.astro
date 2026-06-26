@@ -1,0 +1,115 @@
+---
+export interface Props {
+  type: 'video' | 'image';
+  image?: string;
+  youtubeId?: string;
+  playerId: string;
+  title: string;
+  kicker: string;
+  description: string;
+  details?: string[];
+  link?: string;
+  linkLabel?: string;
+}
+
+const { type, image, youtubeId, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
+const origin = Astro.url.origin;
+---
+
+<article class="media-card">
+  <div class="media-frame">
+    {type === 'video' && youtubeId ? (
+      <div class="plyr__video-embed" id={playerId}>
+        <iframe
+          src={`https://www.youtube.com/embed/${youtubeId}?origin=${origin}&iv_load_policy=3&modestbranding=1&playsinline=1&rel=0`}
+          allowfullscreen
+          allow="autoplay; encrypted-media"
+          title={title}
+        ></iframe>
+      </div>
+    ) : (
+      image && <img src={image} alt="" loading="lazy" />
+    )}
+  </div>
+  <div class="media-copy">
+    <p class="section-kicker">{kicker}</p>
+    <h2>{title}</h2>
+    <p>{description}</p>
+    {details && details.length > 0 && (
+      <details>
+        <summary>Project notes</summary>
+        {details.map((detail) => <p>{detail}</p>)}
+      </details>
+    )}
+    {link && (
+      <a href={link} target="_blank" rel="noopener noreferrer">{linkLabel || 'Open project'}</a>
+    )}
+  </div>
+</article>
+
+<style>
+  .media-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: start;
+    padding-top: clamp(1rem, 3vw, 2rem);
+    border-top: 1px solid var(--line);
+  }
+
+  .media-frame {
+    background: var(--ink);
+    box-shadow: var(--shadow);
+  }
+
+  .media-frame img {
+    width: 100%;
+    display: block;
+  }
+
+  .media-copy h2 {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .media-copy > p:not(.section-kicker) {
+    color: var(--muted);
+  }
+
+  .media-copy details {
+    margin: 1rem 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 0.8rem 0;
+  }
+
+  .media-copy details p {
+    color: var(--muted);
+  }
+
+  .media-copy summary {
+    cursor: pointer;
+    color: var(--accent);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .media-copy a {
+    color: var(--accent);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+  }
+
+  @media (max-width: 860px) {
+    .media-card {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

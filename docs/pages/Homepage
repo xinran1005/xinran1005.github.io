@@ -1,0 +1,26 @@
+# Homepage
+
+## Description
+Introduce artist and provide a clear entry point to every creative discipline in my portfolio.
+
+## Content
+- artist avatar
+- Personal Description: `I am an Interactive Design Specialist and Independent Producer, driven by a love for ongoing innovation, researching digital art domains to uncover more blended creative opportunities.`
+images link to page: Video, Photography, Design
+
+## Layout
+A clean single-screen landing page with generous white space.
+
+The page has central visual navigation composed of image tiles representing each category.
+
+When the page loads, all image tiles display cropped previews. While idle, one tile at a time smoothly expands to reveal more of its image, cycling through all categories in a continuous loop.
+
+Hovering over a tile pauses the automatic rotation and expands the selected tile to its full preview. The corresponding project title appears above the image, emphasizing the current selection. When the pointer leaves, the tile returns to its default state and the automatic rotation resumes.
+
+Clicking an image tile or its corresponding navigation item opens the selected portfolio section.
+
+## Assets 
+- `/public/user_avatar.jpg`
+- `/public/Video.jpg`
+- `/public/Photography.jpg`
+- `/public/Design.jpg`

@@ -1,92 +1,89 @@
+---
+import BackToTop from '../components/BackToTop.astro';
+import { contactLinks, navItems, site } from '../data/portfolio';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  currentPath = Astro.url.pathname,
+} = Astro.props;
+const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
+---
+
 <!doctype html>
-<html lang="zh-CN">
+<html lang={site.locale}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <title>静帧 | Mise-en-scène</title>
-    <meta name="description" content="Cinematic photography — melancholic, lo-fi, and timeless." />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
   </head>
   <body>
-    <div class="grain" aria-hidden="true"></div>
-    <div class="floating-sphere s1" aria-hidden="true"></div>
-    <div class="floating-sphere s2" aria-hidden="true"></div>
-    <div class="floating-sphere s3" aria-hidden="true"></div>
-    <audio id="bgm" src="/background.mp3" preload="metadata" loop></audio>
-    <button id="music-toggle" class="music-toggle" aria-label="Toggle background music">
-      <svg class="icon-mute" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
-        <line x1="23" y1="9" x2="17" y2="15"/>
-        <line x1="17" y1="9" x2="23" y2="15"/>
-      </svg>
-      <svg class="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M11 5 6 9H2v6h4l5 4V5Z"/>
-      </svg>
-    </button>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label={`${site.name} home`}>
+        <img class="brand-favicon" src="/favicon.ico" alt="" />
+        <span>{site.name}</span>
+      </a>
+      <nav class="site-nav" aria-label="Main navigation">
+        {navItems.map((item, i) => (
+          <>
+            {i > 0 && <span class="nav-sep" aria-hidden="true">/</span>}
+            <a
+              href={item.href}
+              aria-current={currentPath === item.href ? 'page' : undefined}
+            >
+              {item.title}
+            </a>
+          </>
+        ))}
+      </nav>
+    </header>
     <slot />
+    <footer class="site-footer">
+      <nav aria-label="Contact links">
+        {contactLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-label={link.ariaLabel}
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            {link.label === 'LinkedIn' && <span class="contact-icon" data-icon="linkedin"></span>}
+            {link.label === 'Instagram' && <span class="contact-icon" data-icon="instagram"></span>}
+            {link.label === 'Email' && <span class="contact-icon" data-icon="mail"></span>}
+            {link.label}
+          </a>
+        ))}
+      </nav>
+      <p>&copy; 2026 {site.name}</p>
+    </footer>
+    {currentPath !== '/' && <BackToTop />}
   </body>
-
-  <script>
-    const audio = document.getElementById('bgm');
-    const toggle = document.getElementById('music-toggle');
-    let started = false;
-
-    function start() {
-      if (started) return;
-      started = true;
-      audio.volume = 0.12;
-      const seek = () => {
-        if (audio.duration && isFinite(audio.duration)) {
-          audio.currentTime = Math.random() * audio.duration;
-        }
-        audio.play().catch(() => {});
-      };
-      if (audio.readyState >= 1) {
-        seek();
-      } else {
-        audio.addEventListener('loadedmetadata', seek, { once: true });
-      }
-      toggle.classList.add('playing');
-      document.removeEventListener('click', start);
-      document.removeEventListener('touchstart', start);
-    }
-
-    document.addEventListener('click', start);
-    document.addEventListener('touchstart', start);
-
-    toggle.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (audio.paused) {
-        audio.play().catch(() => {});
-        toggle.classList.add('playing');
-      } else {
-        audio.pause();
-        toggle.classList.remove('playing');
-      }
-    });
-  </script>
 </html>
 
 <style is:global>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
-
   *, *::before, *::after {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
   }
 
   :root {
-    --bg: #08080f;
-    --surface: #12121e;
-    --text: #d4d4dc;
-    --text-muted: #6a6a7e;
-    --accent: #ff6b35;
-    --accent-glow: #ff4500;
-    --cyan: #00bcd4;
-    --grain-opacity: 0.05;
+    --bg: #f6f3ee;
+    --paper: #fffdfa;
+    --ink: #15130f;
+    --muted: #6f6a61;
+    --line: #d9d1c6;
+    --accent: #a4492d;
+    --shadow: 0 24px 70px rgba(30, 24, 18, 0.08);
+    --serif: Georgia, 'Times New Roman', serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
   html {
@@ -94,124 +91,176 @@
   }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    margin: 0;
     min-height: 100vh;
-    overflow-x: hidden;
-    line-height: 1.6;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  button,
+  input {
+    font: inherit;
   }
 
   ::selection {
     background: var(--accent);
-    color: var(--bg);
+    color: var(--paper);
   }
 
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--bg);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--text-muted);
-    border-radius: 3px;
-  }
-
-  .grain {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 100;
-    opacity: var(--grain-opacity);
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-size: 256px 256px;
-    mix-blend-mode: overlay;
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem clamp(1rem, 4vw, 3rem);
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+    backdrop-filter: blur(18px);
   }
 
-  .floating-sphere {
-    position: fixed;
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--serif);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    text-decoration: none;
+  }
+
+  .brand-favicon {
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
+  }
+
+  .site-nav,
+  .site-footer nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.8rem, 2vw, 1.5rem);
+    flex-wrap: wrap;
+  }
+
+  .site-nav a,
+  .site-footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--muted);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 180ms ease;
+  }
+
+  .site-nav a:hover,
+  .site-nav a[aria-current='page'],
+  .site-footer a:hover {
+    color: var(--accent);
+  }
+
+  .nav-sep {
+    color: var(--line);
     pointer-events: none;
-    z-index: 0;
-    filter: blur(80px);
-    opacity: 0.15;
   }
 
-  .s1 {
-    width: 500px;
-    height: 500px;
-    top: -150px;
-    left: -100px;
-    background: radial-gradient(circle, var(--cyan), transparent);
-    animation: float 20s ease-in-out infinite;
-  }
-
-  .s2 {
-    width: 400px;
-    height: 400px;
-    bottom: -100px;
-    right: -80px;
-    background: radial-gradient(circle, var(--accent), transparent);
-    animation: float 25s ease-in-out infinite reverse;
-  }
-
-  .s3 {
-    width: 300px;
-    height: 300px;
-    top: 50%;
-    right: -50px;
-    background: radial-gradient(circle, #6a0dad, transparent);
-    animation: float 18s ease-in-out infinite 5s;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -40px) scale(1.05); }
-    66% { transform: translate(-20px, 20px) scale(0.95); }
-  }
-
-  .music-toggle {
-    position: fixed;
-    bottom: 24px;
-    left: 24px;
-    z-index: 150;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(8, 8, 15, 0.7);
-    backdrop-filter: blur(12px);
-    color: var(--text-muted);
-    cursor: pointer;
+  .site-footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    gap: 1rem 2rem;
+    flex-wrap: wrap;
+    padding: 1rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
   }
 
-  .music-toggle:hover {
+  .site-footer p {
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  .page-shell {
+    width: min(1180px, calc(100% - 2rem));
+    margin: 0 auto;
+  }
+
+  .section-kicker {
+    margin: 0 0 0.8rem;
     color: var(--accent);
-    border-color: var(--accent);
-    box-shadow: 0 0 20px rgba(255, 107, 53, 0.15);
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
   }
 
-  .music-toggle .icon-play {
-    display: none;
-  }
-  .music-toggle.playing .icon-play {
-    display: block;
-  }
-  .music-toggle.playing .icon-mute {
-    display: none;
+  .section-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 8vw, 6.4rem);
+    font-weight: 400;
+    line-height: 0.95;
   }
 
-  .music-toggle:not(.playing) .icon-play {
-    display: none;
+  .section-copy {
+    max-width: 680px;
+    margin: 1.2rem 0 0;
+    color: var(--muted);
+    font-size: clamp(1rem, 1.5vw, 1.16rem);
   }
-  .music-toggle:not(.playing) .icon-mute {
-    display: block;
+
+  .contact-icon {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: var(--muted);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    transition: background-color 180ms ease;
+  }
+
+  .contact-icon[data-icon="linkedin"] {
+    mask-image: url(/linkedin.svg);
+    -webkit-mask-image: url(/linkedin.svg);
+  }
+
+  .contact-icon[data-icon="instagram"] {
+    mask-image: url(/instagram.svg);
+    -webkit-mask-image: url(/instagram.svg);
+  }
+
+  .contact-icon[data-icon="mail"] {
+    mask-image: url(/mail.svg);
+    -webkit-mask-image: url(/mail.svg);
+  }
+
+  .site-footer a:hover .contact-icon {
+    background-color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .site-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
   }
 </style>

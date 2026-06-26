@@ -1,244 +1,395 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Gallery from '../components/Gallery.astro';
-import fs from 'fs';
-import path from 'path';
-
-const photosDir = path.join(process.cwd(), 'public', 'photos');
-const photoFiles = fs.readdirSync(photosDir)
-  .filter(f => /\.(jpg|jpeg|png|webp|gif)$/i.test(f))
-  .sort();
+import { contactLinks, navItems, profile, site } from '../data/portfolio';
 ---
 
-<Layout>
-  <header class="hero">
-    <div class="hero-content">
-      <div class="avatar-frame">
-        <img class="avatar" src="/user_avatar.jpg" alt="Photographer" />
-      </div>
-      <h1 class="hero-title-en">Mise-en-scène</h1>
-      <p class="hero-subtitle">靜幀之間 · 藍調時刻</p>
-      <p class="hero-desc">
-        Cinematic photography in the language of melancholia —
-        <br class="break" />
-        lo-fi, grained, and suspended in blue.
-      </p>
-      <a href="#gallery" class="scroll-hint">
-        <span>View gallery</span>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
-        </svg>
-      </a>
-    </div>
-  </header>
+<Layout title={site.title} description={site.description}>
+  <main class="home" data-home>
+    <section class="intro-panel" aria-labelledby="home-title">
+      <img class="avatar" src={profile.avatar} alt="Portrait of Xinran Han" />
+      <p class="section-kicker">Portfolio</p>
+      <h1 id="home-title">Xinran Han</h1>
+      <p>{profile.intro}</p>
+      <nav class="discipline-list" aria-label="Contact links">
+        {contactLinks.map((link) => (
+          <a
+            href={link.href}
+            aria-label={link.ariaLabel}
+            target={link.href.startsWith('http') ? '_blank' : undefined}
+            rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            {link.label === 'LinkedIn' && <span class="contact-icon" data-icon="linkedin"></span>}
+            {link.label === 'Instagram' && <span class="contact-icon" data-icon="instagram"></span>}
+            {link.label === 'Email' && <span class="contact-icon" data-icon="mail"></span>}
+            {link.label}
+          </a>
+        ))}
+      </nav>
+    </section>
 
-  <section id="gallery" class="section">
-    <div class="section-header">
-      <h2 class="section-title">作品 · Works</h2>
-      <p class="section-desc">{photoFiles.length} frames</p>
-    </div>
-    <Gallery photos={photoFiles} />
-  </section>
-
-  <footer class="footer">
-    <div class="footer-content">
-      <p>&copy; {new Date().getFullYear()}</p>
-      <div class="footer-links">
-        <a href="mailto:hello@example.com">Contact</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-      </div>
-    </div>
-  </footer>
+    <section class="tile-field" aria-label="Image navigation">
+      {navItems.map((item, index) => (
+        <a
+          class="tile"
+          href={item.href}
+          data-index={index}
+          data-title={item.title}
+          style={`--x: ${index === 0 ? '-20vw' : index === 1 ? '-3vw' : '15vw'}; 
+          --y: ${index === 0 ? '3vh' : index === 1 ? '-5vh' : '1vh'}; 
+          --focus-x: ${index === 0 ? '-13vw' : index === 1 ? '0' : '10vw'}; 
+          --focus-y: 0`}
+        >
+          <span class="tile-title">{item.title}</span>
+          <img src={item.image} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
+          <span class="tile-caption">{item.description}</span>
+        </a>
+      ))}
+    </section>
+  </main>
 </Layout>
 
 <style>
-  .hero {
-    position: relative;
-    z-index: 1;
-    min-height: 100vh;
+  :global(body) {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem;
-    text-align: center;
+    flex-direction: column;
   }
 
-  .hero-content {
-    max-width: 720px;
+  .home {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+    background: var(--bg);
   }
 
-  .avatar-frame {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 1.5rem;
-    border-radius: 50%;
-    padding: 4px;
-    background: linear-gradient(135deg, var(--accent), var(--cyan));
-    box-shadow: 0 0 30px rgba(255, 107, 53, 0.2), 0 0 60px rgba(0, 188, 212, 0.1);
-    animation: avatar-glow 4s ease-in-out infinite alternate;
+  .intro-panel {
+    flex: none;
+    width: 330px;
+    margin: clamp(1.5rem, 4vw, 3rem) 0 0 clamp(1rem, 3vw, 2rem);
   }
 
   .avatar {
-    width: 100%;
-    height: 100%;
+    width: 56px;
+    aspect-ratio: 1;
+    margin-bottom: 0.8rem;
     border-radius: 50%;
     object-fit: cover;
-    display: block;
-    filter: grayscale(0.3) contrast(1.1);
-    transition: filter 0.4s ease;
+    filter: grayscale(1) contrast(1.08);
   }
 
-  .avatar-frame:hover .avatar {
-    filter: grayscale(0) contrast(1);
-  }
-
-  @keyframes avatar-glow {
-    0% { box-shadow: 0 0 30px rgba(255, 107, 53, 0.2), 0 0 60px rgba(0, 188, 212, 0.1); }
-    100% { box-shadow: 0 0 40px rgba(255, 107, 53, 0.35), 0 0 80px rgba(0, 188, 212, 0.15); }
-  }
-
-  .hero-title-en {
-    font-size: clamp(2.5rem, 10vw, 6rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
+  .intro-panel h1 {
+    margin: 0 0 1.1rem;
+    font-family: var(--serif);
+    font-size: clamp(1.75rem, 3vw, 2.45rem);
+    font-weight: 600;
     line-height: 1;
-    background: linear-gradient(135deg, #ff6b35 0%, #ff4500 40%, #00bcd4 70%, #6a0dad 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 4px 20px rgba(255, 107, 53, 0.3));
-    margin-bottom: 1rem;
   }
 
-  .hero-subtitle {
-    font-size: clamp(1.2rem, 4vw, 2.2rem);
-    font-weight: 300;
-    letter-spacing: 0.15em;
-    color: var(--cyan);
-    margin-bottom: 1.5rem;
-    opacity: 0.8;
+  .intro-panel > p:not(.section-kicker) {
+    margin: 0 0 1.2rem;
+    color: var(--muted);
+    font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+    line-height: 1.45;
   }
 
-  .hero-desc {
-    font-size: clamp(0.95rem, 2vw, 1.15rem);
-    color: var(--text-muted);
-    line-height: 1.8;
-    letter-spacing: 0.02em;
-    margin-bottom: 2.5rem;
+  .discipline-list {
+    margin-top: 3rem;
+    display: grid;
+    justify-items: start;
+    gap: 0.24rem;
   }
 
-  .break {
-    display: none;
-  }
-
-  @media (min-width: 480px) {
-    .break {
-      display: block;
-    }
-  }
-
-  .scroll-hint {
+  .discipline-list a {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    color: var(--text-muted);
+    gap: 0.4rem;
+    color: var(--ink);
+    font-size: clamp(0.76rem, 1vw, 0.86rem);
+    letter-spacing: 0.01em;
     text-decoration: none;
-    font-size: 0.875rem;
-    letter-spacing: 0.1em;
     text-transform: uppercase;
-    transition: color 0.2s;
   }
 
-  .scroll-hint:hover {
+  .contact-icon {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    background-color: var(--ink);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    transition: background-color 180ms ease;
+  }
+
+  .contact-icon[data-icon="linkedin"] {
+    mask-image: url(/linkedin.svg);
+    -webkit-mask-image: url(/linkedin.svg);
+  }
+
+  .contact-icon[data-icon="instagram"] {
+    mask-image: url(/instagram.svg);
+    -webkit-mask-image: url(/instagram.svg);
+  }
+
+  .contact-icon[data-icon="mail"] {
+    mask-image: url(/mail.svg);
+    -webkit-mask-image: url(/mail.svg);
+  }
+
+  .discipline-list a:hover,
+  .discipline-list a:focus-visible {
     color: var(--accent);
   }
 
-  .scroll-hint svg {
-    animation: bounce 2s ease-in-out infinite;
+  .discipline-list a:hover .contact-icon,
+  .discipline-list a:focus-visible .contact-icon {
+    background-color: var(--accent);
   }
 
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(4px); }
-  }
-
-  .section {
-    position: relative;
-    z-index: 1;
-    padding: 4rem 0 6rem;
-  }
-
-  .section-header {
-    text-align: center;
-    margin-bottom: 3rem;
-    padding: 0 1rem;
-  }
-
-  .section-title {
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.5rem;
-  }
-
-  .section-desc {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    letter-spacing: 0.1em;
-  }
-
-  .footer {
-    position: relative;
-    z-index: 1;
-    padding: 3rem 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .footer-content {
-    max-width: 1400px;
-    margin: 0 auto;
+  .tile-field {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 0.85rem;
-    color: var(--text-muted);
+    justify-content: center;
+    z-index: 2;
   }
 
-  .footer-links {
-    display: flex;
-    gap: 1.5rem;
-  }
-
-  .footer-links a {
-    color: var(--text-muted);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .footer-links a:hover {
+  .tile {
+    --tile-w: clamp(92px, 9vw, 128px);
+    --tile-h: clamp(92px, 9vw, 128px);
+    --active-w: clamp(132px, 13vw, 180px);
+    --active-h: clamp(190px, 24vw, 292px);
+    --hover-w: clamp(245px, 29vw, 380px);
+    --hover-h: clamp(365px, 45vw, min(580px, 65vh));
+    position: relative;
+    width: var(--tile-w);
+    height: var(--tile-h);
     color: var(--accent);
+    text-decoration: none;
+    transform: translate(var(--x), var(--y));
+    transition:
+      width 760ms cubic-bezier(.2,.75,.2,1),
+      height 760ms cubic-bezier(.2,.75,.2,1),
+      transform 760ms cubic-bezier(.2,.75,.2,1),
+      z-index 0ms linear 220ms;
   }
 
-  @media (max-width: 480px) {
-    .hero {
-      min-height: 80vh;
-      padding: 1.5rem;
-    }
+  .tile.is-active {
+    width: var(--active-w);
+    height: var(--active-h);
+    transform: translate(var(--focus-x), var(--focus-y));
+    z-index: 3;
+  }
 
-    .avatar-frame {
-      width: 90px;
-      height: 90px;
-      margin-bottom: 1rem;
-    }
+  .home.is-hovering .tile.is-active {
+    width: var(--hover-w);
+    height: var(--hover-h);
+    z-index: 5;
+  }
 
-    .section {
-      padding: 2rem 0 4rem;
-    }
+  .tile:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 5px;
+  }
 
-    .footer-content {
+  .tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: grayscale(1) contrast(1.08) brightness(0.9);
+    transition:
+      filter 500ms ease,
+      transform 760ms cubic-bezier(.2,.75,.2,1);
+  }
+
+  .tile.is-active img {
+    filter: grayscale(0.55) contrast(1.04) brightness(0.92);
+    transform: scale(1.01);
+  }
+
+  .home.is-hovering .tile.is-active img {
+    filter: grayscale(0.05) contrast(1.03) brightness(0.95) saturate(1.25);
+  }
+
+  .tile-title {
+    position: absolute;
+    left: 0;
+    bottom: calc(100% + 0.35rem);
+    max-width: min(70vw, var(--hover-w));
+    opacity: 0;
+    color: var(--accent);
+    font-family: var(--sans);
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    line-height: 1;
+    pointer-events: none;
+    transform: translateY(0.25rem);
+    transition: opacity 220ms ease, transform 220ms ease;
+    white-space: nowrap;
+  }
+
+  .home.is-hovering .tile.is-active .tile-title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .tile-caption {
+    position: absolute;
+    left: 0;
+    top: calc(100% + 0.55rem);
+    width: min(34ch, var(--hover-w));
+    opacity: 0;
+    color: var(--muted);
+    font-size: 0.82rem;
+    line-height: 1.35;
+    pointer-events: none;
+    transition: opacity 220ms ease;
+  }
+
+  .home.is-hovering .tile.is-active .tile-caption {
+    opacity: 1;
+  }
+
+  @media (max-width: 760px) {
+    .home {
+      flex: none;
       flex-direction: column;
-      gap: 0.75rem;
-      text-align: center;
+      min-height: auto;
+      overflow: visible;
+      padding: 2rem 1rem 3rem;
+    }
+
+    .intro-panel {
+      flex: none;
+      width: auto;
+      margin: 0 0 2rem;
+    }
+
+    .tile-field {
+      flex: none;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .tile {
+      display: block;
+      position: relative;
+      transform: none !important;
+      width: auto;
+      min-width: 0;
+      height: clamp(110px, 32.5vw, 180px);
+      justify-self: stretch;
+      transition: height 500ms ease;
+    }
+
+    .tile.is-active,
+    .home.is-hovering .tile.is-active {
+      display: block;
+      width: auto;
+      min-width: 0;
+      height: clamp(220px, 65vw, 360px);
+      transform: none !important;
+      justify-self: stretch;
+      transition: height 500ms ease;
+    }
+
+    .tile img {
+      filter: grayscale(1) contrast(1.08) brightness(0.6);
+      transition: filter 500ms ease;
+    }
+
+    .tile.is-active img {
+      filter: grayscale(0.55) contrast(1.04) brightness(0.92);
+    }
+
+    .tile-title {
+      z-index: 2;
+      opacity: 0;
+      transform: none;
+      bottom: auto;
+      top: 0.8rem;
+      left: 0.8rem;
+      color: var(--paper);
+      text-shadow:
+        0 0 8px rgba(0,0,0,0.8),
+        0 0 2px rgba(0,0,0,0.9);
+      max-width: calc(100% - 1.6rem);
+      font-size: 2rem;
+    }
+
+    .tile-caption {
+      z-index: 2;
+      opacity: 0;
+      display: block;
+      left: 0.8rem;
+      bottom: 0.8rem;
+      top: auto;
+      color: var(--paper);
+      text-shadow:
+        0 0 8px rgba(0,0,0,0.8),
+        0 0 2px rgba(0,0,0,0.9);
+      transition: opacity 220ms ease;
+    }
+
+    .tile.is-active .tile-caption,
+    .tile.is-active .tile-title {
+      opacity: 1;
     }
   }
 </style>
+
+<script>
+  const home = document.querySelector('[data-home]');
+  const tiles = home ? [...home.querySelectorAll('.tile')] : [];
+  let activeIndex = -1;
+  let paused = false;
+  let hasStarted = false;
+
+  function setActive(index) {
+    activeIndex = index;
+    tiles.forEach((tile, tileIndex) => {
+      tile.classList.toggle('is-active', tileIndex === index);
+    });
+  }
+
+  function rotate() {
+    if (paused || tiles.length === 0) return;
+    setActive((activeIndex + 1) % tiles.length);
+  }
+
+  tiles.forEach((tile, index) => {
+    tile.addEventListener('mouseenter', () => {
+      paused = true;
+      home?.classList.add('is-hovering');
+      setActive(index);
+    });
+    tile.addEventListener('focus', () => {
+      paused = true;
+      home?.classList.add('is-hovering');
+      setActive(index);
+    });
+    tile.addEventListener('mouseleave', () => {
+      paused = false;
+      home?.classList.remove('is-hovering');
+    });
+    tile.addEventListener('blur', () => {
+      paused = false;
+      home?.classList.remove('is-hovering');
+    });
+  });
+
+  window.setTimeout(() => {
+    hasStarted = true;
+    rotate();
+  }, 900);
+
+  window.setInterval(() => {
+    if (hasStarted) rotate();
+  }, 3000);
+</script>
