@@ -1,23 +1,25 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import BackToTop from '../components/BackToTop.astro';
 import { contactLinks, navItems, site } from '../data/portfolio';
-
 export interface Props {
   title?: string;
   description?: string;
   currentPath?: string;
+  mainClass?: string;
 }
 
 const {
   title = site.title,
   description = site.description,
   currentPath = Astro.url.pathname,
+  mainClass = 'page-shell',
 } = Astro.props;
 const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
 ---
 
 <!doctype html>
-<html lang={site.locale}>
+<html lang={site.locale} transition:name="root" transition:animate="none">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,6 +27,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <ClientRouter />
   </head>
   <body>
     <header class="site-header">
@@ -46,7 +49,9 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
         ))}
       </nav>
     </header>
-    <slot />
+    <main class={mainClass} transition:animate="fade">
+      <slot />
+    </main>
     <footer class="site-footer">
       <nav aria-label="Contact links">
         {contactLinks.map((link) => (
@@ -58,6 +63,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
           >
             {link.label === 'LinkedIn' && <span class="contact-icon" data-icon="linkedin"></span>}
             {link.label === 'Instagram' && <span class="contact-icon" data-icon="instagram"></span>}
+            {link.label === 'SoundCloud' && <span class="contact-icon" data-icon="soundcloud"></span>}
             {link.label === 'Email' && <span class="contact-icon" data-icon="mail"></span>}
             {link.label}
           </a>
@@ -67,6 +73,16 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     </footer>
     {currentPath !== '/' && <BackToTop />}
   </body>
+
+  <script>
+    document.addEventListener('astro:page-load', function () {
+      var links = document.querySelectorAll('.site-nav a');
+      var path = location.pathname;
+      links.forEach(function (link) {
+        link.toggleAttribute('aria-current', link.getAttribute('href') === path);
+      });
+    });
+  </script>
 </html>
 
 <style is:global>
@@ -246,6 +262,11 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
   .contact-icon[data-icon="instagram"] {
     mask-image: url(/instagram.svg);
     -webkit-mask-image: url(/instagram.svg);
+  }
+
+  .contact-icon[data-icon="soundcloud"] {
+    mask-image: url(/soundcloud.svg);
+    -webkit-mask-image: url(/soundcloud.svg);
   }
 
   .contact-icon[data-icon="mail"] {

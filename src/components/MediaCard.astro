@@ -6,6 +6,7 @@ export interface Props {
   image?: string;
   photos?: string[];
   youtubeId?: string;
+  src?: string;
   playerId: string;
   title: string;
   kicker: string;
@@ -15,13 +16,13 @@ export interface Props {
   linkLabel?: string;
 }
 
-const { type, image, photos, youtubeId, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
+const { type, image, photos, youtubeId, src, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
 const origin = Astro.url.origin;
 ---
 
 <article class="media-card">
   <div class="media-frame">
-    {type === 'video' && youtubeId ? (
+    {type === 'video' && youtubeId && (
       <div class="plyr__video-embed" id={playerId}>
         <iframe
           src={`https://www.youtube.com/embed/${youtubeId}?origin=${origin}&iv_load_policy=3&modestbranding=1&playsinline=1&rel=0`}
@@ -30,25 +31,35 @@ const origin = Astro.url.origin;
           title={title}
         ></iframe>
       </div>
-    ) : photos ? (
+    )}
+    {type === 'video' && src && (
+      <video class="plyr-video" id={playerId} playsinline controls>
+        <source src={src} type={`video/${src.split('.').pop()}`} />
+      </video>
+    )}
+    {photos ? (
       <PhotoCarousel photos={photos} />
     ) : (
-      image && <img src={image} alt="" loading="lazy" />
+      !youtubeId && !src && image && <img src={image} alt="" loading="lazy" />
     )}
   </div>
   <div class="media-copy">
     <p class="section-kicker">{kicker}</p>
     <h2>{title}</h2>
-    <p>{description}</p>
-    {details && details.length > 0 && (
-      <details>
-        <summary>Project notes</summary>
-        {details.map((detail) => <p>{detail}</p>)}
-      </details>
-    )}
-    {link && (
-      <a href={link} target="_blank" rel="noopener noreferrer">{linkLabel || 'Open project'}</a>
-    )}
+    <div class="expand-content">
+      <p>{description}</p>
+      {details && details.length > 0 && details.map((detail) => <p class="detail">{detail}</p>)}
+    </div>
+    <div class="actions-row">
+      {details && details.length > 0 && (
+        <label class="more-btn" aria-label="Toggle details">
+          <input type="checkbox" class="more-toggle" hidden />
+          <span class="more-text">[more]</span>
+          <span class="close-text">[close]</span>
+        </label>
+      )}
+      {link && <a href={link} target="_blank" rel="noopener noreferrer">{linkLabel || 'Open project'}</a>}
+    </div>
   </div>
 </article>
 
@@ -63,6 +74,9 @@ const origin = Astro.url.origin;
   }
 
   .media-frame {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
     background: var(--bg);
   }
 
@@ -81,34 +95,91 @@ const origin = Astro.url.origin;
 
   .media-copy > p:not(.section-kicker) {
     color: var(--muted);
+    margin-bottom: 0;
   }
 
-  .media-copy details {
-    margin: 1rem 0;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding: 0.8rem 0;
+  .expand-content {
+    overflow: hidden;
+    max-height: fit-content;
+    transition: max-height 0.3s ease;
+    margin: 0.5rem 0;
+    padding-inline-end: 0.5rem;
+    scrollbar-gutter: stable;
   }
 
-  .media-copy details p {
+  .expand-content .detail {
+    display: none;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content {
+    max-height: 15rem;
+    overflow: hidden auto;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 3px;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  .media-copy:has(.more-toggle:checked) .expand-content .detail {
+    display: block;
+  }
+
+  .close-text {
+    display: none;
+  }
+
+  .media-copy:has(.more-toggle:checked) .more-text {
+    display: none;
+  }
+
+  .media-copy:has(.more-toggle:checked) .close-text {
+    display: inline;
+  }
+
+  .expand-content p {
     color: var(--muted);
   }
 
-  .media-copy summary {
-    cursor: pointer;
-    color: var(--accent);
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+  .actions-row {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
   }
 
+  .actions-row button,
+  .actions-row .more-btn,
   .media-copy a {
+    background: none;
+    border: none;
+    cursor: pointer;
+    user-select: none;
     color: var(--accent);
     font-size: 0.82rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.35em;
+    padding: 0;
+    font-family: inherit;
   }
 
   @media (max-width: 860px) {
@@ -117,3 +188,5 @@ const origin = Astro.url.origin;
     }
   }
 </style>
+
+

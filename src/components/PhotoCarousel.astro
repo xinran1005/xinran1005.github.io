@@ -33,19 +33,21 @@ const { photos, alt } = Astro.props;
   <dialog class="lightbox" aria-label="Photo viewer">
     <button class="lightbox-close" type="button" aria-label="Close photo viewer">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
-      Close
+      <span>Close</span>
     </button>
-    <button class="lightbox-prev" type="button" aria-label="Previous photo">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-      Previous
-    </button>
+    <div class="lightbox-nav">
+      <button class="lightbox-prev" type="button" aria-label="Previous photo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Previous</span>
+      </button>
+      <button class="lightbox-next" type="button" aria-label="Next photo">
+        <span>Next</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
+    </div>
     <div class="polaroid">
       <img src="" alt="" />
     </div>
-    <button class="lightbox-next" type="button" aria-label="Next photo">
-      Next
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-    </button>
     <p class="lightbox-counter"></p>
   </dialog>
 </div>
@@ -92,13 +94,14 @@ const { photos, alt } = Astro.props;
     background: rgba(255, 253, 250, 0.85);
     color: var(--ink);
     cursor: pointer;
-    opacity: 0;
+    opacity: 0.7;
     transition: opacity 200ms ease;
   }
 
-  .photo-carousel:hover .carousel-prev,
-  .photo-carousel:hover .carousel-next {
+  .carousel-prev:hover,
+  .carousel-next:hover {
     opacity: 1;
+    background: #fff;
   }
 
   .carousel-prev { left: 0.5rem; }
@@ -117,6 +120,10 @@ const { photos, alt } = Astro.props;
     display: flex;
     gap: 0.35rem;
     z-index: 2;
+    padding: 0.35rem 0.5rem;
+    border-radius: 1rem;
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(4px);
   }
 
   .carousel-dot {
@@ -153,8 +160,17 @@ const { photos, alt } = Astro.props;
   .lightbox[open] {
     display: grid;
     grid-template-columns: auto 1fr auto;
+    grid-template-rows: auto 1fr auto;
     gap: 0.8rem;
     align-items: center;
+  }
+
+  .lightbox .polaroid {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .lightbox .polaroid img {
@@ -162,7 +178,10 @@ const { photos, alt } = Astro.props;
     max-height: 70vh;
     width: auto;
     max-width: 100%;
-    margin: 0 auto;
+  }
+
+  .lightbox-nav {
+    display: contents;
   }
 
   .lightbox button {
@@ -185,13 +204,25 @@ const { photos, alt } = Astro.props;
     color: var(--accent);
   }
 
+  .lightbox-prev {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .lightbox-next {
+    grid-column: 3;
+    grid-row: 2;
+  }
+
   .lightbox .lightbox-close {
     grid-column: 1 / -1;
+    grid-row: 1;
     justify-self: end;
   }
 
   .lightbox-counter {
     grid-column: 1 / -1;
+    grid-row: 3;
     margin: 0;
     color: var(--muted);
     text-align: center;
@@ -200,30 +231,37 @@ const { photos, alt } = Astro.props;
 
   @media (max-width: 680px) {
     .lightbox[open] {
-      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      padding: 0.5rem;
     }
 
-    .lightbox .polaroid {
-      padding: .5rem .5rem 1.5rem;
-      grid-column: 1 / -1;
-      grid-row: 2;
+    .lightbox .polaroid img {
+      max-height: 75vh;
     }
 
     .lightbox-prev,
     .lightbox-next {
-      grid-row: 3;
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      padding: 0;
+      justify-content: center;
     }
 
-    .lightbox-next {
-      justify-content: flex-end;
+    .lightbox-prev span,
+    .lightbox-next span {
+      display: none;
     }
   }
 </style>
 
-<script>
+<script is:inline data-astro-rerun>
   document.querySelectorAll('[data-carousel]').forEach((el) => {
+    if (el.dataset.init) return;
+    el.dataset.init = '';
+
     const track = el.querySelector('.carousel-track');
-    const slides = el.querySelectorAll('.carousel-slide');
+    const originalSlides = el.querySelectorAll('.carousel-slide');
     const images = el.querySelectorAll('.carousel-slide img');
     const prevBtn = el.querySelector('.carousel-prev');
     const nextBtn = el.querySelector('.carousel-next');
@@ -235,16 +273,40 @@ const { photos, alt } = Astro.props;
     const lightboxPrev = dialog?.querySelector('.lightbox-prev');
     const lightboxNext = dialog?.querySelector('.lightbox-next');
 
+    if (!track || originalSlides.length === 0) return;
+    const total = originalSlides.length;
     let current = 0;
 
-    function go(index) {
-      if (!track || slides.length === 0) return;
-      current = (index + slides.length) % slides.length;
+    const firstClone = originalSlides[0].cloneNode(true);
+    const lastClone = originalSlides[total - 1].cloneNode(true);
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, track.firstChild);
+    const allSlides = track.querySelectorAll('.carousel-slide');
+    const slideWidth = () => allSlides[0].offsetWidth;
+
+    go(1, true);
+
+    function go(index, instant = false) {
+      if (instant) track.style.transition = 'none';
+      current = index;
       track.style.transform = `translateX(-${current * 100}%)`;
+      if (instant) {
+        requestAnimationFrame(() => { requestAnimationFrame(() => { track.style.transition = ''; }); });
+      }
+      const realIndex = ((current - 1) % total + total) % total;
       dots.forEach((dot, i) => {
-        dot.toggleAttribute('aria-current', i === current);
+        dot.toggleAttribute('aria-current', i === realIndex);
       });
     }
+
+    function handleTransitionEnd() {
+      if (current === 0) {
+        go(total, true);
+      } else if (current === total + 1) {
+        go(1, true);
+      }
+    }
+    track.addEventListener('transitionend', handleTransitionEnd);
 
     function lockScroll(lock) {
       document.body.style.overflow = lock ? 'hidden' : '';
@@ -269,8 +331,25 @@ const { photos, alt } = Astro.props;
     prevBtn?.addEventListener('click', () => go(current - 1));
     nextBtn?.addEventListener('click', () => go(current + 1));
     dots.forEach((dot) => {
-      dot.addEventListener('click', () => go(parseInt(dot.dataset.index || '0')));
+      dot.addEventListener('click', () => {
+        const realIndex = parseInt(dot.dataset.index || '0');
+        go(realIndex + 1);
+      });
     });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    el.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+    el.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].screenX - touchStartX;
+      const dy = e.changedTouches[0].screenY - touchStartY;
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+        go(current + (dx < 0 ? 1 : -1));
+      }
+    }, { passive: true });
 
     closeBtn?.addEventListener('click', () => { dialog?.close(); lockScroll(false); });
     lightboxPrev?.addEventListener('click', () => showLightbox(current - 1));
@@ -284,5 +363,21 @@ const { photos, alt } = Astro.props;
       if (event.key === 'ArrowLeft') showLightbox(current - 1);
       if (event.key === 'ArrowRight') showLightbox(current + 1);
     });
+
+    if (dialog) {
+      let lbTouchStartX = 0;
+      let lbTouchStartY = 0;
+      dialog.addEventListener('touchstart', (e) => {
+        lbTouchStartX = e.changedTouches[0].screenX;
+        lbTouchStartY = e.changedTouches[0].screenY;
+      }, { passive: true });
+      dialog.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].screenX - lbTouchStartX;
+        const dy = e.changedTouches[0].screenY - lbTouchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
+          showLightbox(current + (dx < 0 ? 1 : -1));
+        }
+      }, { passive: true });
+    }
   });
 </script>

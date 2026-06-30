@@ -10,5 +10,8 @@ export default defineConfig({
     routing: {
       prefixDefaultLocale: false,
     },
-  },
+  }, 
+  prefetch: {
+    defaultStrategy: 'viewport'
+  }
 });

@@ -3,21 +3,23 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
-import { photographyAlbums } from '../data/portfolio';
+import { photographyAlbums, type PhotoAlbum } from '../data/portfolio';
 
-const photosDir = path.join(process.cwd(), 'public', 'photos');
+const photosDir = path.join(process.cwd(), 'public', 'Photography');
+const photosUrl = '/Photography';
 
-interface AlbumWithPhotos {
+interface ResolvedAlbum {
   id: string;
   title: string;
-  href: string;
   description: string;
   cover: string;
   photos: string[];
+  showName?: boolean;
+  children?: ResolvedAlbum[];
 }
 
-const albums: AlbumWithPhotos[] = photographyAlbums
-  .map((album) => {
+function resolveAlbum(album: PhotoAlbum): ResolvedAlbum | null {
+  if (album.albumFolder) {
     const dir = path.join(photosDir, album.albumFolder);
     if (!fs.existsSync(dir)) return null;
     const files = fs
@@ -26,23 +28,47 @@ const albums: AlbumWithPhotos[] = photographyAlbums
       .sort();
     if (files.length === 0) return null;
     return {
-      ...album,
-      cover: `/photos/${album.albumFolder}/${files[0]}`,
-      photos: files.map((f) => `/photos/${album.albumFolder}/${f}`),
+      id: album.id,
+      title: album.title,
+      description: album.description,
+      cover: `${photosUrl}/${album.albumFolder}/${files[0]}`,
+      photos: files.map((f) => `${photosUrl}/${album.albumFolder}/${f}`),
+      ...(album.showName && { showName: true }),
     };
-  })
-  .filter((a): a is AlbumWithPhotos => a !== null);
+  }
+
+  if (album.children) {
+    const resolvedChildren = album.children
+      .map(resolveAlbum)
+      .filter((c): c is ResolvedAlbum => c !== null);
+    if (resolvedChildren.length === 0) return null;
+    return {
+      id: album.id,
+      title: album.title,
+      description: album.description,
+      cover: resolvedChildren[0].cover,
+      photos: [],
+      ...(album.showName && { showName: true }),
+      children: resolvedChildren,
+    };
+  }
+
+  return null;
+}
+
+const albums: ResolvedAlbum[] = photographyAlbums
+  .map(resolveAlbum)
+  .filter((a): a is ResolvedAlbum => a !== null);
 ---
 
 <Layout title="Photography" description="Photography works organized into themed albums." currentPath="/photography/">
-  <main class="page-shell">
     <section class="page-title" aria-labelledby="photography-title">
       <p class="section-kicker">Photography</p>
     </section>
 
     <section class="albums" aria-label="Photography albums">
       {albums.map((album) => (
-        <a class="album-card" href={album.href}>
+        <a class="album-card" href={`#album-${album.id}`}>
           <img src={album.cover} alt="" />
           <span class="album-info">
             <strong>{album.title}</strong>
@@ -52,10 +78,32 @@ const albums: AlbumWithPhotos[] = photographyAlbums
       ))}
     </section>
 
-    {albums.map((album) => (
-      <PhotoGallery album={album} />
-    ))}
-  </main>
+    {albums.map((album) =>
+      album.children ? (
+        <div class="parent-album" id={`album-${album.id}`}>
+          <div class="parent-album-heading">
+            <h2 class="parent-album-title">{album.title}</h2>
+            <p>{album.description}</p>
+          </div>
+          <nav class="sub-albums" aria-label="Sub-albums">
+            {album.children.map((child) => (
+              <a class="album-card sub" href={`#album-${child.id}`}>
+                <img src={child.cover} alt="" />
+                <span class="album-info">
+                  <strong>{child.title}</strong>
+                  <small>{child.description}</small>
+                </span>
+              </a>
+            ))}
+          </nav>
+          {album.children.map((child) => (
+            <PhotoGallery album={{ ...child, showName: album.showName || child.showName }} />
+          ))}
+        </div>
+      ) : (
+        <PhotoGallery album={album} />
+      )
+    )}
 </Layout>
 
 <style>
@@ -122,8 +170,36 @@ const albums: AlbumWithPhotos[] = photographyAlbums
     overflow-wrap: break-word;
   }
 
+  .parent-album {
+    padding-top: 2rem;
+  }
+
+  .sub-albums {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .parent-album-heading {
+    margin-bottom: 2rem;
+  }
+
+  .parent-album-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 400;
+  }
+
+  .parent-album-heading p {
+    margin: 0.6rem 0 0;
+    color: var(--muted);
+  }
+
   @media (max-width: 680px) {
-    .albums {
+    .albums,
+    .sub-albums {
       grid-template-columns: 1fr;
     }
 

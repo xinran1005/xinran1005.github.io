@@ -1,10 +1,13 @@
 ---
+import fontUrl from '../assets/TheGirlNextDoor-Regular.ttf?url';
+const fontFace = `@font-face{font-family:'The Girl Next Door';src:url("${fontUrl}") format("truetype");font-weight:normal;font-style:normal}`;
 export interface Props {
   album: {
     id: string;
     title: string;
     description: string;
     photos: string[];
+    showName?: boolean;
   };
 }
 
@@ -12,10 +15,10 @@ const { album } = Astro.props;
 const sectionId = `album-${album.id}`;
 ---
 
-<section class="album-section" id={sectionId} data-photo-gallery={album.id} aria-labelledby={`${sectionId}-title`}>
+<section class="album-section" id={sectionId} data-photo-gallery={album.id} { ...(album.showName && { 'data-show-name': '' }) } aria-labelledby={`${sectionId}-title`}>
   <div class="album-heading">
     <h2 id={`${sectionId}-title`} class="album-title">{album.title}</h2>
-    <p>{album.description}</p>
+    <p class="section-kicker">{album.description}</p>
   </div>
 
   <div class="photo-grid">
@@ -27,26 +30,32 @@ const sectionId = `album-${album.id}`;
   </div>
 
   <dialog class="lightbox" aria-label="Photo viewer">
-    <button class="close" type="button" aria-label="Close photo viewer">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
-      Close
-    </button>
-    <button class="previous" type="button" aria-label="Previous photo">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-      Previous
-    </button>
-    <div class="polaroid">
-      <img src="" alt="" />
+    <div class="lightbox-body">
+      <div class="polaroid">
+        <img src="" alt="" />
+        <p class="name"></p>
+      </div>
+      <p class="counter"></p>
+      <button class="close lightboxbutton" type="button" aria-label="Close photo viewer">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Close</span>
+      </button>
+      <button class="previous lightboxbutton" type="button" aria-label="Previous photo">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+        <span>Prev</span>
+      </button>
+      <button class="next lightboxbutton" type="button" aria-label="Next photo">
+        <span>Next</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
+      </button>
     </div>
-    <button class="next" type="button" aria-label="Next photo">
-      Next
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-    </button>
-    <p class="counter"></p>
   </dialog>
 </section>
 
+<style is:global set:html={fontFace}></style>
+
 <style>
+
   .album-section {
     padding-top: 2rem;
   }
@@ -63,7 +72,7 @@ const sectionId = `album-${album.id}`;
   }
 
   .album-heading p {
-    margin: 0.6rem 0 0;
+    margin: 0;
     color: var(--muted);
   }
 
@@ -112,7 +121,7 @@ const sectionId = `album-${album.id}`;
   .lightbox {
     width: min(1000px, calc(100% - 2rem));
     border: 0;
-    padding: 1rem;
+    padding: 0;
     background: transparent;
   }
 
@@ -121,17 +130,25 @@ const sectionId = `album-${album.id}`;
   }
 
   .lightbox[open] {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-body {
+    position: relative;
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
     align-items: center;
   }
 
   .lightbox .polaroid {
+    position: relative;
     background: #fff;
     padding: 1rem 1rem 3rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    justify-self: center;
   }
 
   .lightbox .polaroid img {
@@ -163,77 +180,120 @@ const sectionId = `album-${album.id}`;
   }
 
   .lightbox .close {
-    grid-column: 1 / -1;
-    justify-self: end;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+
+  .previous {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  .next {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    translate: 0 -50%;
   }
 
   .counter {
-    grid-column: 1 / -1;
-    margin: 0;
+    position: absolute;
+    top: .9rem;
+    left: 50%;
+    translate: -50% 0;
+    margin: 0rem;
     color: var(--muted);
-    text-align: center;
     font-size: 0.8rem;
   }
 
-  @media (max-width: 680px) {
-    .lightbox[open] {
-      grid-template-columns: 1fr 1fr;
+  .name {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 1rem;
+    right: 1rem;
+    margin: 0;
+    font-family: 'The Girl Next Door', cursive;
+    font-size: 1rem;
+    line-height: 1;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    .lightbox .close {
+      top: 0;
+      right: 0;
     }
 
-    .lightbox .polaroid {
-      padding: .5rem .5rem 1.5rem;
-      grid-column: 1 / -1;
-      grid-row: 2;
-    }
-
-    .previous,
-    .next {
-      grid-row: 3;
-    }
-
-    .next {
-      justify-content: flex-end;
+    .lightboxbutton span{
+      display: none;
     }
   }
 </style>
 
-<script>
+<script is:inline data-astro-rerun>
   document.querySelectorAll('[data-photo-gallery]').forEach((section) => {
+    if (section.dataset.init) return;
+    section.dataset.init = '';
+
     const buttons = [...section.querySelectorAll('.photo-button')];
     const dialog = section.querySelector('.lightbox');
     const image = dialog?.querySelector('img');
     const counter = dialog?.querySelector('.counter');
+    const name = dialog?.querySelector('.name');
     const close = dialog?.querySelector('.close');
     const previous = dialog?.querySelector('.previous');
     const next = dialog?.querySelector('.next');
+    const showName = section.hasAttribute('data-show-name');
     let current = 0;
-
-    function lockScroll(lock) {
-      document.body.style.overflow = lock ? 'hidden' : '';
-    }
+    let loading = false;
 
     function show(index) {
       if (!dialog || !image || !counter || buttons.length === 0) return;
-      current = (index + buttons.length) % buttons.length;
-      image.src = buttons[current].dataset.src || '';
-      counter.textContent = `${current + 1} / ${buttons.length}`;
-      if (!dialog.open) {
-        lockScroll(true);
-        dialog.showModal();
+      if (loading) return;
+      const next = (index + buttons.length) % buttons.length;
+      if (image.src !== buttons[next].dataset.src) {
+        loading = true;
+        current = next;
+        const src = buttons[current].dataset.src || '';
+        image.src = src;
+        counter.textContent = `${current + 1} / ${buttons.length}`;
+        if (name) name.textContent = showName ? (src.split('/').pop() || '').replace(/\.\w+$/, '') : '';
       }
+      if (!dialog.open) {
+        const scrollY = window.scrollY;
+        document.documentElement.style.overflow = 'hidden';
+        dialog.showModal();
+        window.scrollTo(0, scrollY);
+      }
+    }
+
+    image?.addEventListener('load', () => { loading = false; });
+
+    function closeDialog() {
+      dialog?.close();
+      document.documentElement.style.overflow = '';
     }
 
     buttons.forEach((button, index) => {
       button.addEventListener('click', () => show(index));
     });
 
-    close?.addEventListener('click', () => { dialog?.close(); lockScroll(false); });
+    close?.addEventListener('click', closeDialog);
     previous?.addEventListener('click', () => show(current - 1));
     next?.addEventListener('click', () => show(current + 1));
     dialog?.addEventListener('click', (event) => {
-      if (event.target === dialog) { dialog.close(); lockScroll(false); }
+      if (event.target === dialog) { closeDialog(); }
     });
-    dialog?.addEventListener('close', () => lockScroll(false));
+    dialog?.addEventListener('close', () => {
+      document.documentElement.style.overflow = '';
+    });
     document.addEventListener('keydown', (event) => {
       if (!dialog?.open) return;
       if (event.key === 'ArrowLeft') show(current - 1);

@@ -3,8 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { contactLinks, navItems, profile, site } from '../data/portfolio';
 ---
 
-<Layout title={site.title} description={site.description}>
-  <main class="home" data-home>
+<Layout title={site.title} description={site.description} mainClass="home">
     <section class="intro-panel" aria-labelledby="home-title">
       <img class="avatar" src={profile.avatar} alt="Portrait of Xinran Han" />
       <p class="section-kicker">Portfolio</p>
@@ -20,6 +19,7 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
           >
             {link.label === 'LinkedIn' && <span class="contact-icon" data-icon="linkedin"></span>}
             {link.label === 'Instagram' && <span class="contact-icon" data-icon="instagram"></span>}
+            {link.label === 'SoundCloud' && <span class="contact-icon" data-icon="soundcloud"></span>}
             {link.label === 'Email' && <span class="contact-icon" data-icon="mail"></span>}
             {link.label}
           </a>
@@ -34,9 +34,9 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
           href={item.href}
           data-index={index}
           data-title={item.title}
-          style={`--x: ${index === 0 ? '-20vw' : index === 1 ? '-3vw' : '15vw'}; 
-          --y: ${index === 0 ? '3vh' : index === 1 ? '-5vh' : '1vh'}; 
-          --focus-x: ${index === 0 ? '-13vw' : index === 1 ? '0' : '10vw'}; 
+          style={`--x: ${index === 0 ? '-12vw' : index === 1 ? '-4vw' : index === 2 ? '4vw' : '12vw'}; 
+          --y: ${index === 0 ? '3vh' : index === 1 ? '-5vh' : index === 2 ? '2vh' : '-4vh'}; 
+          --focus-x: ${index === 0 ? '-9vw' : index === 1 ? '-3vw' : index === 2 ? '3vw' : '9vw'}; 
           --focus-y: 0`}
         >
           <span class="tile-title">{item.title}</span>
@@ -45,7 +45,6 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
         </a>
       ))}
     </section>
-  </main>
 </Layout>
 
 <style>
@@ -133,6 +132,11 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
   .contact-icon[data-icon="instagram"] {
     mask-image: url(/instagram.svg);
     -webkit-mask-image: url(/instagram.svg);
+  }
+
+  .contact-icon[data-icon="soundcloud"] {
+    mask-image: url(/soundcloud.svg);
+    -webkit-mask-image: url(/soundcloud.svg);
   }
 
   .contact-icon[data-icon="mail"] {
@@ -344,52 +348,60 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
   }
 </style>
 
-<script>
-  const home = document.querySelector('[data-home]');
-  const tiles = home ? [...home.querySelectorAll('.tile')] : [];
-  let activeIndex = -1;
-  let paused = false;
-  let hasStarted = false;
+<script is:inline data-astro-rerun>
+  (function () {
+    var home = document.querySelector('[data-home]');
+    if (!home || home.dataset.init) return;
+    home.dataset.init = '';
 
-  function setActive(index) {
-    activeIndex = index;
-    tiles.forEach((tile, tileIndex) => {
-      tile.classList.toggle('is-active', tileIndex === index);
-    });
-  }
+    if (home.dataset.timerId) clearInterval(Number(home.dataset.timerId));
+    if (home.dataset.timeoutId) clearTimeout(Number(home.dataset.timeoutId));
 
-  function rotate() {
-    if (paused || tiles.length === 0) return;
-    setActive((activeIndex + 1) % tiles.length);
-  }
+    var tiles = [...home.querySelectorAll('.tile')];
+    var activeIndex = -1;
+    var paused = false;
+    var hasStarted = false;
 
-  tiles.forEach((tile, index) => {
-    tile.addEventListener('mouseenter', () => {
-      paused = true;
-      home?.classList.add('is-hovering');
-      setActive(index);
-    });
-    tile.addEventListener('focus', () => {
-      paused = true;
-      home?.classList.add('is-hovering');
-      setActive(index);
-    });
-    tile.addEventListener('mouseleave', () => {
-      paused = false;
-      home?.classList.remove('is-hovering');
-    });
-    tile.addEventListener('blur', () => {
-      paused = false;
-      home?.classList.remove('is-hovering');
-    });
-  });
+    function setActive(index) {
+      activeIndex = index;
+      tiles.forEach(function (tile, tileIndex) {
+        tile.classList.toggle('is-active', tileIndex === index);
+      });
+    }
 
-  window.setTimeout(() => {
-    hasStarted = true;
-    rotate();
-  }, 900);
+    function rotate() {
+      if (paused || tiles.length === 0) return;
+      setActive((activeIndex + 1) % tiles.length);
+    }
 
-  window.setInterval(() => {
-    if (hasStarted) rotate();
-  }, 3000);
+    tiles.forEach(function (tile, index) {
+      tile.addEventListener('mouseenter', function () {
+        paused = true;
+        home.classList.add('is-hovering');
+        setActive(index);
+      });
+      tile.addEventListener('focus', function () {
+        paused = true;
+        home.classList.add('is-hovering');
+        setActive(index);
+      });
+      tile.addEventListener('mouseleave', function () {
+        paused = false;
+        home.classList.remove('is-hovering');
+      });
+      tile.addEventListener('blur', function () {
+        paused = false;
+        home.classList.remove('is-hovering');
+      });
+    });
+
+    home.dataset.timeoutId = String(window.setTimeout(function () {
+      hasStarted = true;
+      rotate();
+    }, 900));
+
+    home.dataset.timerId = String(window.setInterval(function () {
+      if (hasStarted) rotate();
+    }, 3000));
+  })();
 </script>

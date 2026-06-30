@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import MediaCard from '../components/MediaCard.astro';
+import { artInstallationProjects } from '../data/portfolio';
+---
+
+<Layout title="Art Installation" description="Immersive and spatial installation works." currentPath="/art-installation/">
+    <section class="page-title" aria-labelledby="art-installation-title">
+      <p class="section-kicker">Art Installation</p>
+    </section>
+
+    <section class="art-list" aria-label="Art installation projects">
+      {artInstallationProjects.map((project, index) => (
+        <MediaCard
+          type="video"
+          youtubeId={project.youtubeId}
+          photos={project.photos}
+          playerId={`player-${index}`}
+          title={project.title}
+          kicker={project.role}
+          description={project.intro}
+          details={project.details}
+          link={project.link}
+          linkLabel="View project"
+        />
+      ))}
+    </section>
+</Layout>
+
+<style>
+  .page-title {
+    padding: 1rem 0;
+  }
+
+  .art-list {
+    display: grid;
+    gap: 2rem;
+    padding-bottom: 3rem;
+  }
+
+  :global(.plyr) {
+    --plyr-color-main: var(--accent);
+    height: 100%;
+  }
+</style>
+
+<link is:inline rel="stylesheet" href="https://cdn.plyr.io/3.8.4/plyr.css" />
+<script is:inline data-astro-rerun src="https://cdn.plyr.io/3.8.4/plyr.js"></script>
+<script is:inline data-astro-rerun>
+  document.querySelectorAll('.plyr__video-embed, .plyr-video').forEach(function (player) {
+    new Plyr(player, {
+      controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
+    });
+  });
+</script>

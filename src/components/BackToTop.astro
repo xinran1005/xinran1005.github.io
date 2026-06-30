@@ -3,6 +3,11 @@
 </a>
 
 <style>
+  @keyframes show-top-btn {
+    from { opacity: 0; pointer-events: none; }
+    to { opacity: 1; pointer-events: auto; }
+  }
+
   .back-to-top {
     position: fixed;
     bottom: 2rem;
@@ -21,35 +26,12 @@
     text-decoration: none;
     opacity: 0;
     pointer-events: none;
-  }
-
-  .back-to-top.is-visible {
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 300ms ease, color 180ms ease;
+    animation: show-top-btn linear both;
+    animation-timeline: scroll(root);
+    animation-range: 250px 350px;
   }
 
   .back-to-top:hover {
     color: var(--accent);
   }
 </style>
-
-<script>
-  const el = document.querySelector('.back-to-top');
-  if (el) {
-    let ticking = false;
-    document.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          el.classList.toggle('is-visible', window.scrollY > 300);
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  }
-</script>

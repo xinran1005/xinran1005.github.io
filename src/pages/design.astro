@@ -1,7 +1,6 @@
 ---
 import fs from 'node:fs';
 import path from 'node:path';
-import 'plyr/dist/plyr.css';
 import Layout from '../layouts/Layout.astro';
 import MediaCard from '../components/MediaCard.astro';
 import { designSections } from '../data/portfolio';
@@ -13,6 +12,7 @@ interface DesignProject {
   image?: string;
   albumFolder?: string;
   youtubeId?: string;
+  src?: string;
   status: string;
   description: string;
   details?: string[];
@@ -40,7 +40,6 @@ function resolveProject(project: DesignProject): DesignProject {
 ---
 
 <Layout title="Design" description="UI/UX and graphic design works organized by discipline." currentPath="/design/">
-  <main class="page-shell">
     <section class="page-title" aria-labelledby="design-title">
       <p class="section-kicker">Design</p>
     </section>
@@ -58,10 +57,11 @@ function resolveProject(project: DesignProject): DesignProject {
               const p = resolveProject(project);
               return (
                 <MediaCard
-                  type={project.youtubeId ? 'video' : 'image'}
+                  type={project.youtubeId || project.src ? 'video' : 'image'}
                   image={p.image}
                   photos={p.photos}
                   youtubeId={p.youtubeId}
+                  src={p.src}
                   playerId={`design-${index}`}
                   title={p.title}
                   kicker={p.status}
@@ -76,7 +76,6 @@ function resolveProject(project: DesignProject): DesignProject {
         </section>
       ))}
     </div>
-  </main>
 </Layout>
 
 <style>
@@ -115,7 +114,7 @@ function resolveProject(project: DesignProject): DesignProject {
 
   .design-list {
     display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
+    gap: 2rem;
   }
 
   :global(.plyr) {
@@ -130,10 +129,10 @@ function resolveProject(project: DesignProject): DesignProject {
   }
 </style>
 
-<script>
-  import Plyr from 'plyr';
-
-  document.querySelectorAll('.plyr__video-embed').forEach((player) => {
+<link is:inline rel="stylesheet" href="https://cdn.plyr.io/3.8.4/plyr.css" />
+<script is:inline data-astro-rerun src="https://cdn.plyr.io/3.8.4/plyr.js"></script>
+<script is:inline data-astro-rerun>
+  document.querySelectorAll('.plyr__video-embed, .plyr-video').forEach(function (player) {
     new Plyr(player, {
       controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
     });

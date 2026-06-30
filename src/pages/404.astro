@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="404" description="Page not found" currentPath="/404" mainClass="page-shell not-found">
+  <section class="not-found">
+  <p class="section-kicker">Oops.</p>
+    <h1 class="section-title">You're off the map.</h1>
+    <p class="section-copy">I spent 3 hours designing this 404 page. Please enjoy it, then click below.</p>
+    <a href="/" class="back-link">Back to home</a>
+    </section>  
+</Layout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    text-align: center;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 0.7rem 1.5rem;
+    border: 1px solid var(--line);
+    color: var(--accent);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 180ms ease, color 180ms ease;
+  }
+
+  .back-link:hover {
+    background: var(--accent);
+    color: var(--paper);
+  }
+</style>
