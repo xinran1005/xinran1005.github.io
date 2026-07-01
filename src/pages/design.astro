@@ -14,7 +14,6 @@ interface DesignProject {
   albumFolder?: string;
   youtubeId?: string;
   src?: string;
-  pdfUrl?: string;
   status: string;
   description: string;
   details?: string[];
@@ -59,12 +58,11 @@ function resolveProject(project: DesignProject): DesignProject {
               const p = resolveProject(project);
               return (
                 <MediaCard
-                  type={p.pdfUrl ? 'pdf' : p.youtubeId || p.src ? 'video' : 'image'}
+                  type={p.youtubeId || p.src ? 'video' : 'image'}
                   image={p.image}
                   photos={p.photos}
                   youtubeId={p.youtubeId}
                   src={p.src}
-                  pdfUrl={p.pdfUrl}
                   playerId={`design-${index}`}
                   title={p.title}
                   kicker={p.status}
@@ -134,16 +132,6 @@ function resolveProject(project: DesignProject): DesignProject {
 
 <script>
   import Plyr from 'plyr';
-  import EmbedPDF from '@embedpdf/snippet';
-
-  document.querySelectorAll('.pdf-viewer').forEach(function (container) {
-    EmbedPDF.init({
-      type: 'container',
-      target: container,
-      src: container.dataset.pdfSrc,
-      theme: { preference: 'system' }
-    });
-  });
 
   document.querySelectorAll('.plyr__video-embed').forEach((player) => {
     new Plyr(player, {

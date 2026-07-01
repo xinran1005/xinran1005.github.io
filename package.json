@@ -12,7 +12,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@embedpdf/snippet": "^2.14.4",
     "astro": "^7.0.2",
     "plyr": "^3.8.4"
   }

@@ -243,7 +243,7 @@ export const designSections = [
       },
       {
         title: "Slides Design",
-        pdfUrl: "/slides.pdf",
+        albumFolder: "Slides",
         status: "slides design",
         description:
           "By: Xinran Han, Mariam Yarkova, Chris Moon, Lynn"
