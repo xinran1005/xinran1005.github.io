@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
@@ -13,5 +13,17 @@ export default defineConfig({
   }, 
   prefetch: {
     defaultStrategy: 'viewport'
-  }
+  },
+  fonts: [{
+    provider: fontProviders.local(),
+    name: "Lumios Marker",
+    cssVariable: "--handwritten",
+    options: {
+      variants: [{
+        src: ['./src/assets/Lumios Marker.otf'],
+        weight: 'normal',
+        style: 'normal'
+      }]
+    }
+  }]
 });

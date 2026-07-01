@@ -1,6 +1,4 @@
 ---
-import fontUrl from '../assets/TheGirlNextDoor-Regular.ttf?url';
-const fontFace = `@font-face{font-family:'The Girl Next Door';src:url("${fontUrl}") format("truetype");font-weight:normal;font-style:normal}`;
 export interface Props {
   album: {
     id: string;
@@ -51,8 +49,6 @@ const sectionId = `album-${album.id}`;
     </div>
   </dialog>
 </section>
-
-<style is:global set:html={fontFace}></style>
 
 <style>
 
@@ -215,7 +211,8 @@ const sectionId = `album-${album.id}`;
     left: 1rem;
     right: 1rem;
     margin: 0;
-    font-family: 'The Girl Next Door', cursive;
+    color: var(--muted);
+    font-family: var(--handwritten), cursive;
     font-size: 1rem;
     line-height: 1;
     text-overflow: ellipsis;
@@ -237,7 +234,7 @@ const sectionId = `album-${album.id}`;
   }
 </style>
 
-<script is:inline data-astro-rerun>
+<script>
   document.querySelectorAll('[data-photo-gallery]').forEach((section) => {
     if (section.dataset.init) return;
     section.dataset.init = '';

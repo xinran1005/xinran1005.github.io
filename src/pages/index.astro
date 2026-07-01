@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import { contactLinks, navItems, profile, site } from '../data/portfolio';
 ---
 
-<Layout title={site.title} description={site.description} mainClass="home">
+<Layout title={site.title} description={site.description}>
     <section class="intro-panel" aria-labelledby="home-title">
       <img class="avatar" src={profile.avatar} alt="Portrait of Xinran Han" />
       <p class="section-kicker">Portfolio</p>
@@ -52,16 +52,15 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     display: flex;
     flex-direction: column;
   }
-
-  .home {
-    position: relative;
-    flex: 1;
-    min-height: 0;
+  
+  :global(.page-shell) {
+    width: 100%;
     display: flex;
-    overflow: hidden;
-    background: var(--bg);
+    flex: 1;
+    position: relative;
+    max-height: calc(100vh - 8rem);
   }
-
+  
   .intro-panel {
     flex: none;
     width: 330px;
@@ -189,7 +188,7 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     z-index: 3;
   }
 
-  .home.is-hovering .tile.is-active {
+  .tile-field.is-hovering .tile.is-active {
     width: var(--hover-w);
     height: var(--hover-h);
     z-index: 5;
@@ -216,7 +215,7 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     transform: scale(1.01);
   }
 
-  .home.is-hovering .tile.is-active img {
+  .tile-field.is-hovering .tile.is-active img {
     filter: grayscale(0.05) contrast(1.03) brightness(0.95) saturate(1.25);
   }
 
@@ -236,7 +235,7 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     white-space: nowrap;
   }
 
-  .home.is-hovering .tile.is-active .tile-title {
+  .tile-field.is-hovering .tile.is-active .tile-title {
     opacity: 1;
     transform: translateY(0);
   }
@@ -254,12 +253,12 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     transition: opacity 220ms ease;
   }
 
-  .home.is-hovering .tile.is-active .tile-caption {
+  .tile-field.is-hovering .tile.is-active .tile-caption {
     opacity: 1;
   }
 
   @media (max-width: 760px) {
-    .home {
+    .tile-field {
       flex: none;
       flex-direction: column;
       min-height: auto;
@@ -268,7 +267,9 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     }
 
     .intro-panel {
-      flex: none;
+      position: relative;
+      top: auto;
+      left: auto;
       width: auto;
       margin: 0 0 2rem;
     }
@@ -293,7 +294,7 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     }
 
     .tile.is-active,
-    .home.is-hovering .tile.is-active {
+    .tile-field.is-hovering .tile.is-active {
       display: block;
       width: auto;
       min-width: 0;
@@ -348,10 +349,8 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
   }
 </style>
 
-<script is:inline data-astro-rerun>
-  (function () {
-    var home = document.querySelector('[data-home]');
-    if (!home || home.dataset.init) return;
+<script>
+    var home = document.querySelector('.tile-field');
     home.dataset.init = '';
 
     if (home.dataset.timerId) clearInterval(Number(home.dataset.timerId));
@@ -403,5 +402,4 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     home.dataset.timerId = String(window.setInterval(function () {
       if (hasStarted) rotate();
     }, 3000));
-  })();
 </script>

@@ -255,7 +255,7 @@ const { photos, alt } = Astro.props;
   }
 </style>
 
-<script is:inline data-astro-rerun>
+<script>
   document.querySelectorAll('[data-carousel]').forEach((el) => {
     if (el.dataset.init) return;
     el.dataset.init = '';

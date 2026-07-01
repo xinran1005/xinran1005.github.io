@@ -1,10 +1,11 @@
 ---
+import 'plyr/dist/plyr.css';
 import Layout from '../layouts/Layout.astro';
 import MediaCard from '../components/MediaCard.astro';
 import { videoProjects } from '../data/portfolio';
 ---
 
-<Layout title="Video" description="Narrative, documentary, and experimental video works." currentPath="/video/" mainClass="page-shell video-page">
+<Layout title="Video" description="Narrative, documentary, and experimental video works." currentPath="/video/">
     <h2 class="section-kicker page-title">Video</h2>
     <section class="video-list" aria-label="Video projects">
       {videoProjects.map((project, index) => (
@@ -24,10 +25,6 @@ import { videoProjects } from '../data/portfolio';
 </Layout>
 
 <style>
-  .video-page {
-    padding-bottom: 3rem;
-  }
-
   .page-title {
     padding: 1rem 0;
     font-weight: normal;
@@ -44,10 +41,10 @@ import { videoProjects } from '../data/portfolio';
   }
 </style>
 
-<link is:inline rel="stylesheet" href="https://cdn.plyr.io/3.8.4/plyr.css" />
-<script is:inline data-astro-rerun src="https://cdn.plyr.io/3.8.4/plyr.js"></script>
-<script is:inline data-astro-rerun>
-  document.querySelectorAll('.plyr__video-embed, .plyr-video').forEach(function (player) {
+<script>
+  import Plyr from 'plyr';
+
+  document.querySelectorAll('.plyr__video-embed').forEach((player) => {
     new Plyr(player, {
       controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'fullscreen'],
     });

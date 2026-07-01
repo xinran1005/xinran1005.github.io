@@ -231,7 +231,7 @@ export const designSections = [
       {
         title: "Boat",
         status: "Art director, 2D Assets Designer",
-        youtubeId: "MrTRE-UvG7s",
+        src: "/VR Guide.mp4",
         description:
           "A VR horror puzzle game where the player, a fisherman who reels in a strange doll, becomes trapped in thick fog on an anchored boat. Exploring the boat and following clues reveals the truth behind the dolls and an unpredictable ending.",
         link: "https://www.sfu.ca/siat/showcase/spring-2024-project-showcase/iat-445-boat.html",
@@ -242,11 +242,11 @@ export const designSections = [
         ]
       },
       {
-        title: "2D Assets in Video",
-        image: "/Design.jpg",
-        status: "External media links coming soon",
+        title: "Slides Design",
+        pdfUrl: "/slides.pdf",
+        status: "slides design",
         description:
-          "Graphic assets created to support moving-image storytelling."
+          "By: Xinran Han, Mariam Yarkova, Chris Moon, Lynn"
       }
     ]
   }
