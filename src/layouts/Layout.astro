@@ -153,6 +153,10 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     border-radius: 50%;
   }
 
+  .site-footer nav {
+    justify-content: center;
+  }
+
   .site-nav,
   .site-footer nav {
     display: flex;
@@ -274,6 +278,12 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
       height: auto;
       align-items: flex-start;
       flex-direction: column;
+    }
+
+    .site-footer {
+      height: auto;
+      flex-direction: column;
+      gap: 0.5rem;
     }
   }
 </style>
