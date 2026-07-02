@@ -16,21 +16,21 @@ export const navItems = [
   {
     title: "Photography",
     href: "/photography/",
-    image: "/Photography.jpg",
+    image: "/Photography/Landscape/Last Sunset on Earth, Vancouver.jpg",
     description:
       "Albums of places, people, and moments through visual storytelling."
   },
   {
     title: "Design",
     href: "/design/",
-    image: "/Design.jpg",
+    image: "/photos/p1/A4 - 214.png",
     description:
       "UI/UX and graphic design projects across digital and print contexts."
   },
   {
     title: "Art Installation",
     href: "/art-installation/",
-    image: "/Photography.jpg",
+    image: "/Art Installartion/1682377305474.jpg",
     description:
       "Immersive and spatial installation works."
   }
@@ -194,7 +194,7 @@ export const designSections = [
         ]
       },
       {
-        title: "Web Design for Holland Festival",
+        title: "Holland Festival",
         youtubeId: "XwoyeREdLf4",
         status: "Web Design, 2023",
         description:
@@ -230,7 +230,7 @@ export const designSections = [
       },
       {
         title: "Boat",
-        status: "Art director, 2D Assets Designer",
+        status: "2D Assets Design for VR Game, 2024",
         src: "/VR Guide.mp4",
         description:
           "A VR horror puzzle game where the player, a fisherman who reels in a strange doll, becomes trapped in thick fog on an anchored boat. Exploring the boat and following clues reveals the truth behind the dolls and an unpredictable ending.",
@@ -242,7 +242,7 @@ export const designSections = [
         ]
       },
       {
-        title: "Slides Design",
+        title: "Dieter Rams",
         albumFolder: "Slides",
         status: "slides design",
         description:

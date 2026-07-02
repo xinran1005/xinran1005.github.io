@@ -38,7 +38,7 @@ const { photos, alt } = Astro.props;
     <div class="lightbox-nav">
       <button class="lightbox-prev" type="button" aria-label="Previous photo">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-        <span>Previous</span>
+        <span>Prev</span>
       </button>
       <button class="lightbox-next" type="button" aria-label="Next photo">
         <span>Next</span>
@@ -89,7 +89,7 @@ const { photos, alt } = Astro.props;
     height: 2.2rem;
     margin: 0;
     padding: 0;
-    border: 0;
+    border: 1px solid var(--line);
     border-radius: 50%;
     background: rgba(255, 253, 250, 0.85);
     color: var(--ink);
@@ -101,16 +101,12 @@ const { photos, alt } = Astro.props;
   .carousel-prev:hover,
   .carousel-next:hover {
     opacity: 1;
+    color: var(--accent);
     background: #fff;
   }
 
   .carousel-prev { left: 0.5rem; }
   .carousel-next { right: 0.5rem; }
-
-  .carousel-prev:hover,
-  .carousel-next:hover {
-    background: #fff;
-  }
 
   .carousel-dots {
     position: absolute;

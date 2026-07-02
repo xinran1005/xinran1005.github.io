@@ -190,7 +190,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     align-items: center;
     justify-content: center;
     height: 3rem;
-    gap: auto 2rem;
+    gap: 0 2rem;
     flex-wrap: wrap;
     padding: 1rem;
     border-top: 1px solid var(--line);
@@ -204,6 +204,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
 
   .page-shell {
     width: min(1180px, calc(100% - 2rem));
+    min-height: calc(100vh - 6.5rem);
     margin: 0 auto;
   }
 
@@ -270,6 +271,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
 
   @media (max-width: 640px) {
     .site-header {
+      height: auto;
       align-items: flex-start;
       flex-direction: column;
     }

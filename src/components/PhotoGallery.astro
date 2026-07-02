@@ -53,7 +53,7 @@ const sectionId = `album-${album.id}`;
 <style>
 
   .album-section {
-    padding-top: 2rem;
+    margin-bottom: 3rem;
   }
 
   .album-heading {
@@ -213,7 +213,7 @@ const sectionId = `album-${album.id}`;
     margin: 0;
     color: var(--muted);
     font-family: var(--handwritten), cursive;
-    font-size: 1rem;
+    font-size: 1.5rem;
     line-height: 1;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -222,7 +222,11 @@ const sectionId = `album-${album.id}`;
     text-align: center;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 680px) {
+    .name {
+      font-size: 1rem;
+    }
+
     .lightbox .close {
       top: 0;
       right: 0;

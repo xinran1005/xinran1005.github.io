@@ -34,10 +34,6 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
           href={item.href}
           data-index={index}
           data-title={item.title}
-          style={`--x: ${index === 0 ? '-12vw' : index === 1 ? '-4vw' : index === 2 ? '4vw' : '12vw'}; 
-          --y: ${index === 0 ? '3vh' : index === 1 ? '-5vh' : index === 2 ? '2vh' : '-4vh'}; 
-          --focus-x: ${index === 0 ? '-9vw' : index === 1 ? '-3vw' : index === 2 ? '3vw' : '9vw'}; 
-          --focus-y: 0`}
         >
           <span class="tile-title">{item.title}</span>
           <img src={item.image} alt="" loading={index === 0 ? 'eager' : 'lazy'} />
@@ -48,24 +44,17 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
 </Layout>
 
 <style>
-  :global(body) {
-    display: flex;
-    flex-direction: column;
-  }
   
   :global(.page-shell) {
     width: 100%;
-    overflow-x: hidden;
     display: flex;
-    flex: 1;
-    position: relative;
-    max-height: calc(100vh - 8rem);
   }
   
   .intro-panel {
     flex: none;
-    width: 330px;
-    margin: clamp(1.5rem, 4vw, 3rem) 0 0 clamp(1rem, 3vw, 2rem);
+    width: 20rem;
+    margin-top: 2rem;
+    margin-left: 2rem;
   }
 
   .avatar {
@@ -74,7 +63,6 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     margin-bottom: 0.8rem;
     border-radius: 50%;
     object-fit: cover;
-    filter: grayscale(1) contrast(1.08);
   }
 
   .intro-panel h1 {
@@ -155,8 +143,9 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
   }
 
   .tile-field {
-    flex: 1;
-    display: flex;
+    width: calc(100% - 22rem);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     align-items: center;
     justify-content: center;
     z-index: 2;
@@ -167,8 +156,8 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     --tile-h: clamp(92px, 9vw, 128px);
     --active-w: clamp(132px, 13vw, 180px);
     --active-h: clamp(190px, 24vw, 292px);
-    --hover-w: clamp(245px, 29vw, 380px);
-    --hover-h: clamp(365px, 45vw, min(580px, 65vh));
+    --hover-w: 100%;
+    --hover-h: 80%;
     position: relative;
     width: var(--tile-w);
     height: var(--tile-h);
@@ -213,11 +202,10 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
 
   .tile.is-active img {
     filter: grayscale(0.55) contrast(1.04) brightness(0.92);
-    transform: scale(1.01);
   }
 
   .tile-field.is-hovering .tile.is-active img {
-    filter: grayscale(0.05) contrast(1.03) brightness(0.95) saturate(1.25);
+    filter: none;
   }
 
   .tile-title {
@@ -259,27 +247,19 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
   }
 
   @media (max-width: 760px) {
-    .tile-field {
-      flex: none;
-      flex-direction: column;
-      min-height: auto;
-      overflow: visible;
-      padding: 2rem 1rem 3rem;
-    }
+
+    :global(.page-shell) {
+    flex-direction: column;
+  }
 
     .intro-panel {
-      position: relative;
-      top: auto;
-      left: auto;
-      width: auto;
-      margin: 0 0 2rem;
+      margin: 1rem;
     }
 
     .tile-field {
       flex: none;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
       width: 100%;
     }
 
