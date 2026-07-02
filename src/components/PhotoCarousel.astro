@@ -298,7 +298,7 @@ const { photos, alt } = Astro.props;
     function handleTransitionEnd() {
       if (current === 0) {
         go(total, true);
-      } else if (current === total + 1) {
+      } else if (current > total) {
         go(1, true);
       }
     }
@@ -375,5 +375,42 @@ const { photos, alt } = Astro.props;
         }
       }, { passive: true });
     }
+
+    let autoTimer = null;
+    const AUTO_INTERVAL = 4000;
+
+    function startAutoRotate() {
+      stopAutoRotate();
+      autoTimer = setInterval(() => go(current + 1), AUTO_INTERVAL);
+    }
+
+    function stopAutoRotate() {
+      if (autoTimer !== null) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    function resetAutoTimer() {
+      if (autoTimer !== null) startAutoRotate();
+    }
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          startAutoRotate();
+        } else {
+          stopAutoRotate();
+        }
+      });
+    }, { threshold: 0.5 });
+    obs.observe(el);
+
+    prevBtn?.addEventListener('click', resetAutoTimer);
+    nextBtn?.addEventListener('click', resetAutoTimer);
+    dots.forEach((dot) => {
+      dot.addEventListener('click', resetAutoTimer);
+    });
+    el.addEventListener('touchend', resetAutoTimer, { passive: true });
   });
 </script>
