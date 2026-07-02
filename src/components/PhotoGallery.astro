@@ -211,7 +211,7 @@ const sectionId = `album-${album.id}`;
     left: 1rem;
     right: 1rem;
     margin: 0;
-    color: var(--muted);
+    color: var(--ink);
     font-family: var(--handwritten), cursive;
     font-size: 1.5rem;
     line-height: 1;
@@ -264,8 +264,6 @@ const sectionId = `album-${album.id}`;
         current = next;
         const src = buttons[current].dataset.src || '';
         image.src = src;
-        counter.textContent = `${current + 1} / ${buttons.length}`;
-        if (name) name.textContent = showName ? (src.split('/').pop() || '').replace(/\.\w+$/, '') : '';
       }
       if (!dialog.open) {
         const scrollY = window.scrollY;
@@ -275,7 +273,15 @@ const sectionId = `album-${album.id}`;
       }
     }
 
-    image?.addEventListener('load', () => { loading = false; });
+    function updateInfo() {
+      loading = false;
+      if (counter) counter.textContent = `${current + 1} / ${buttons.length}`;
+      const src = buttons[current]?.dataset?.src || '';
+      if (name) name.textContent = showName ? (src.split('/').pop() || '').replace(/\.\w+$/, '') : '';
+    }
+
+    image?.addEventListener('load', updateInfo);
+    image?.addEventListener('error', updateInfo);
 
     function closeDialog() {
       dialog?.close();
