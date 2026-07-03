@@ -1,10 +1,12 @@
 ---
+import type { Photo } from '../data/portfolio';
+
 export interface Props {
   album: {
     id: string;
     title: string;
     description: string;
-    photos: string[];
+    photos: Photo[];
     showName?: boolean;
   };
 }
@@ -20,9 +22,9 @@ const sectionId = `album-${album.id}`;
   </div>
 
   <div class="photo-grid">
-    {album.photos.map((src, index) => (
-      <button class="photo-button" data-src={src} data-index={index} aria-label={`${album.title} photo ${index + 1}`}>
-        <img src={src} alt="" loading="lazy" />
+    {album.photos.map((photo, index) => (
+      <button class="photo-button" data-src={photo.srcOriginal} data-index={index} aria-label={`${album.title} photo ${index + 1}`}>
+        <img src={photo.src} alt="" loading="lazy" />
       </button>
     ))}
   </div>

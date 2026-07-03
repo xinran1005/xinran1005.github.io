@@ -16,21 +16,21 @@ export const navItems = [
   {
     title: "Photography",
     href: "/photography/",
-    image: "/Photography/Landscape/Last Sunset on Earth, Vancouver.jpg",
+    image: "/photography/Landscape/Last Sunset on Earth, Vancouver.jpg",
     description:
       "Albums of places, people, and moments through visual storytelling."
   },
   {
     title: "Design",
     href: "/design/",
-    image: "/photos/p1/A4 - 214.png",
+    image: "/design/poster-2/A4 - 214.png",
     description:
       "UI/UX and graphic design projects across digital and print contexts."
   },
   {
     title: "Art Installation",
     href: "/art-installation/",
-    image: "/Art Installartion/1682377305474.jpg",
+    image: "/art-installation/1682377305474.jpg",
     description:
       "Immersive and spatial installation works."
   }
@@ -57,8 +57,8 @@ export const contactLinks = [
   label: "SoundCloud",
   href: "https://soundcloud.com/",
   ariaLabel: "Xinran Han on SoundCloud"
-},
-{
+  },
+  {
     label: "Email",
     href: "mailto:xinranh100599@gmail.com",
     ariaLabel: "Email Xinran Han"
@@ -90,18 +90,23 @@ export const videoProjects = [
       'A sound sculpture video exploring the phrase "butterflies in your stomach" through heartbeat, wings, red and blue light, and dreamlike motion.',
     details: [
       'Start with a concept → shoot the video → create a spotting log → record and create the sounds → synchronize the content.',
-'Concept: Our concept comes from an English slang term, "butterfly in your stomach".',
-'I first saw this description from a movie, Jojo Rabbit in 2019. The main character in this movie is a little boy, and the whole movie is depicted from a child’s perspective. This slang term is not the overall tone of the movie but comes from a very short clip. When the boy had a crush on another girl, he said that it feels like a lot of butterflies fluttering in his stomach. I looked up this slang term after watching the movie, and it’s more like describing a tense mood, like a first date, a wedding day, a job presentation, or before a sporting event. But I like this heartwarming explanation better. Every time I think of this slang term, I’ll think of a human rib (which also looks a lot like a cage) with beautiful butterflies flying around it.',
-'After watching the examples from the course, I immediately thought of this long-loved slang term. The sound of a heartbeat, and the sound of a butterfly flying, will be very good video content.',
-'This feeling is like “I almost wish we were butterflied and lived but three summer days. There such days with you I could fill with more delight than so common years could ever contain.”',
-'Every time I think of this feeling, I think of so many words that I wrote but couldn’t utter (I love the sound of the typewriter, but only I can hear the words written on it.), butterflies flying in a white room like a dream. And the end of this story is, she left. It felt like lots of butterflies dying.',
-'Our shot Aesthetics：For video shooting, we chose red and blue jels for lighting. Red is a lot like love, while blue is sadness. For the part of a person\'s shadow, we choose to constantly change the exposure of the shooting to create an uncapturable “dream” sense.',
-'The music software we use is Cubasis and Logic Pro. The final music is called “heart”. This song has some repeat melody with the sound of heartbeat and wind. In the part close to the end, there is a little sense of dramatic conflict',
-'Hope this track will give you a heartbeat and stomach-churning too.'
+      'Concept: Our concept comes from an English slang term, "butterfly in your stomach".',
+      'I first saw this description from a movie, Jojo Rabbit in 2019. The main character in this movie is a little boy, and the whole movie is depicted from a child’s perspective. This slang term is not the overall tone of the movie but comes from a very short clip. When the boy had a crush on another girl, he said that it feels like a lot of butterflies fluttering in his stomach. I looked up this slang term after watching the movie, and it’s more like describing a tense mood, like a first date, a wedding day, a job presentation, or before a sporting event. But I like this heartwarming explanation better. Every time I think of this slang term, I’ll think of a human rib (which also looks a lot like a cage) with beautiful butterflies flying around it.',
+      'After watching the examples from the course, I immediately thought of this long-loved slang term. The sound of a heartbeat, and the sound of a butterfly flying, will be very good video content.',
+      'This feeling is like “I almost wish we were butterflied and lived but three summer days. There such days with you I could fill with more delight than so common years could ever contain.”',
+      'Every time I think of this feeling, I think of so many words that I wrote but couldn’t utter (I love the sound of the typewriter, but only I can hear the words written on it.), butterflies flying in a white room like a dream. And the end of this story is, she left. It felt like lots of butterflies dying.',
+      'Our shot Aesthetics：For video shooting, we chose red and blue jels for lighting. Red is a lot like love, while blue is sadness. For the part of a person\'s shadow, we choose to constantly change the exposure of the shooting to create an uncapturable “dream” sense.',
+      'The music software we use is Cubasis and Logic Pro. The final music is called “heart”. This song has some repeat melody with the sound of heartbeat and wind. In the part close to the end, there is a little sense of dramatic conflict',
+      'Hope this track will give you a heartbeat and stomach-churning too.'
     ],
     link: "https://www.youtube.com/watch?v=8hXpgYRkxsI"
   }
 ];
+
+export interface Photo {
+  src: string;
+  srcOriginal: string;
+}
 
 export interface PhotoAlbum {
   id: string;
@@ -173,7 +178,7 @@ export const artInstallationProjects = [
       "Course: IAT 443 Interactive Video"
     ],
     link: "https://www.sfu.ca/siat/showcase/spring-2023-project-showcase/explore-the-projects/iat-443-exposure.html",
-    photos: ["/Art Installartion/1682377305474.jpg", "/Art Installartion/1682377311570.jpg"]
+    albumFolder: "art-installation"
   }
 ];
 
@@ -217,14 +222,14 @@ export const designSections = [
     projects: [
       {
         title: "SS Global Streaming & Sourcing Worldwide",
-        albumFolder: "p2",
+        albumFolder: "design/poster-1",
         status: "Poster Design, 2026",
         description:
           "SS Global Streaming & Sourcing Worldwide during The China Import and Export Fair"
       },
       {
         title: "Holland Festival",
-        albumFolder: "p1",
+        albumFolder: "design/poster-2",
         status: "Poster Design, 2023",
         description: "Poster work for Holland Festival"
       },
@@ -243,7 +248,7 @@ export const designSections = [
       },
       {
         title: "Dieter Rams",
-        albumFolder: "Slides",
+        albumFolder: "design/slides",
         status: "slides design",
         description:
           "By: Xinran Han, Mariam Yarkova, Chris Moon, Lynn"

@@ -1,6 +1,8 @@
 ---
+import type { Photo } from '../data/portfolio';
+
 export interface Props {
-  photos: string[];
+  photos: Photo[];
   alt?: string;
 }
 
@@ -9,9 +11,9 @@ const { photos, alt } = Astro.props;
 
 <div class="photo-carousel" data-carousel>
   <div class="carousel-track">
-    {photos.map((src, index) => (
+    {photos.map((photo, index) => (
       <div class="carousel-slide" data-index={index}>
-        <img src={src} alt={alt ? `${alt} ${index + 1}` : ''} loading={index === 0 ? 'eager' : 'lazy'} />
+        <img src={photo.src} data-src-original={photo.srcOriginal} alt={alt ? `${alt} ${index + 1}` : ''} loading={index === 0 ? 'eager' : 'lazy'} />
       </div>
     ))}
   </div>
@@ -311,7 +313,7 @@ const { photos, alt } = Astro.props;
     function showLightbox(index) {
       if (!dialog || !lightboxImg || !counter || images.length === 0) return;
       current = (index + images.length) % images.length;
-      lightboxImg.src = images[current].src;
+      lightboxImg.src = images[current].dataset.srcOriginal || images[current].src;
       counter.textContent = `${current + 1} / ${images.length}`;
       if (!dialog.open) {
         lockScroll(true);

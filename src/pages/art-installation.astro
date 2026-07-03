@@ -1,28 +1,58 @@
 ---
 import 'plyr/dist/plyr.css';
+import fs from 'node:fs';
+import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import MediaCard from '../components/MediaCard.astro';
-import { artInstallationProjects } from '../data/portfolio';
+import { artInstallationProjects, type Photo } from '../data/portfolio';
+
+function toPhoto(f: string, folder: string): Photo {
+  const url = `/${folder}/${f}`;
+  const isJpgPng = /\.(jpe?g|png)$/i.test(f);
+  return {
+    src: isJpgPng ? url.replace(/\.(jpe?g|png)$/i, '__w800.webp') : url,
+    srcOriginal: url,
+  };
+}
+
+function resolveProject(project: any) {
+  if (project.albumFolder) {
+    const dir = path.join(process.cwd(), 'public', project.albumFolder);
+    if (fs.existsSync(dir)) {
+      const files = fs
+        .readdirSync(dir)
+        .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f) && !f.includes('__w800'))
+        .sort();
+      if (files.length > 0) {
+        return { ...project, photos: files.map((f) => toPhoto(f, project.albumFolder)) };
+      }
+    }
+  }
+  return project;
+}
 ---
 
 <Layout title="Art Installation" description="Immersive and spatial installation works." currentPath="/art-installation/">
     <h1 class="page-title">Art Installation</h1>
 
     <section class="art-list" aria-label="Art installation projects">
-      {artInstallationProjects.map((project, index) => (
-        <MediaCard
-          type="video"
-          youtubeId={project.youtubeId}
-          photos={project.photos}
-          playerId={`player-${index}`}
-          title={project.title}
-          kicker={project.role}
-          description={project.intro}
-          details={project.details}
-          link={project.link}
-          linkLabel="View project"
-        />
-      ))}
+      {artInstallationProjects.map((project, index) => {
+        const p = resolveProject(project);
+        return (
+          <MediaCard
+            type="video"
+            youtubeId={p.youtubeId}
+            photos={p.photos}
+            playerId={`player-${index}`}
+            title={p.title}
+            kicker={p.role}
+            description={p.intro}
+            details={p.details}
+            link={p.link}
+            linkLabel="View project"
+          />
+        );
+      })}
     </section>
 </Layout>
 

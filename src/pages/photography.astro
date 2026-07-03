@@ -3,17 +3,26 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
-import { photographyAlbums, type PhotoAlbum } from '../data/portfolio';
+import { photographyAlbums, type Photo, type PhotoAlbum } from '../data/portfolio';
 
-const photosDir = path.join(process.cwd(), 'public', 'Photography');
-const photosUrl = '/Photography';
+const photosDir = path.join(process.cwd(), 'public', 'photography');
+const photosUrl = '/photography';
+
+function toPhoto(f: string, folder: string): Photo {
+  const url = `${photosUrl}/${folder}/${f}`;
+  const isJpgPng = /\.(jpe?g|png)$/i.test(f);
+  return {
+    src: isJpgPng ? url.replace(/\.(jpe?g|png)$/i, '__w800.webp') : url,
+    srcOriginal: url,
+  };
+}
 
 interface ResolvedAlbum {
   id: string;
   title: string;
   description: string;
   cover: string;
-  photos: string[];
+  photos: Photo[];
   showName?: boolean;
   children?: ResolvedAlbum[];
 }
@@ -24,15 +33,15 @@ function resolveAlbum(album: PhotoAlbum): ResolvedAlbum | null {
     if (!fs.existsSync(dir)) return null;
     const files = fs
       .readdirSync(dir)
-      .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f))
+      .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f) && !f.includes('__w800'))
       .sort();
     if (files.length === 0) return null;
     return {
       id: album.id,
       title: album.title,
       description: album.description,
-      cover: `${photosUrl}/${album.albumFolder}/${files[0]}`,
-      photos: files.map((f) => `${photosUrl}/${album.albumFolder}/${f}`),
+      cover: toPhoto(files[0], album.albumFolder).src,
+      photos: files.map((f) => toPhoto(f, album.albumFolder)),
       ...(album.showName && { showName: true }),
     };
   }

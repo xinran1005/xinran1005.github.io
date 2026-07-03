@@ -4,9 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import MediaCard from '../components/MediaCard.astro';
-import { designSections } from '../data/portfolio';
-
-const photosDir = path.join(process.cwd(), 'public', 'photos');
+import { designSections, type Photo } from '../data/portfolio';
 
 interface DesignProject {
   title: string;
@@ -19,20 +17,28 @@ interface DesignProject {
   details?: string[];
   link?: string;
   linkLabel?: string;
-  photos?: string[];
+  photos?: Photo[];
+}
+
+function toPhoto(f: string, folder: string): Photo {
+  const url = `/${folder}/${f}`;
+  const isJpgPng = /\.(jpe?g|png)$/i.test(f);
+  return {
+    src: isJpgPng ? url.replace(/\.(jpe?g|png)$/i, '__w800.webp') : url,
+    srcOriginal: url,
+  };
 }
 
 function resolveProject(project: DesignProject): DesignProject {
   if (project.albumFolder) {
-    const dir = path.join(photosDir, project.albumFolder);
+    const dir = path.join(process.cwd(), 'public', project.albumFolder);
     if (fs.existsSync(dir)) {
       const files = fs
         .readdirSync(dir)
-        .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f))
-        .sort()
-        .map((f) => `/photos/${project.albumFolder}/${f}`);
+        .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f) && !f.includes('__w800'))
+        .sort();
       if (files.length > 0) {
-        return { ...project, photos: files };
+        return { ...project, photos: files.map((f) => toPhoto(f, project.albumFolder!)) };
       }
     }
   }

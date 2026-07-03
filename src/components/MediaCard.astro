@@ -1,10 +1,11 @@
 ---
 import PhotoCarousel from './PhotoCarousel.astro';
+import type { Photo } from '../data/portfolio';
 
 export interface Props {
   type: 'video' | 'image';
   image?: string;
-  photos?: string[];
+  photos?: Photo[];
   youtubeId?: string;
   src?: string;
   playerId: string;
