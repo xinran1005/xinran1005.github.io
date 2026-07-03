@@ -10,27 +10,27 @@ export const navItems = [
   {
     title: "Video",
     href: "/video/",
-    image: "/Video.jpg",
+    image: "/Video__w800.webp",
     description: "Narrative, documentary, and experimental moving-image work."
   },
   {
     title: "Photography",
     href: "/photography/",
-    image: "/photography/Landscape/Last Sunset on Earth, Vancouver.jpg",
+    image: "/photography/Landscape/Last Sunset on Earth, Vancouver__w800.webp",
     description:
       "Albums of places, people, and moments through visual storytelling."
   },
   {
     title: "Design",
     href: "/design/",
-    image: "/design/poster-2/A4 - 214.png",
+    image: "/design/poster-2/A4 - 214__w800.webp",
     description:
       "UI/UX and graphic design projects across digital and print contexts."
   },
   {
     title: "Art Installation",
     href: "/art-installation/",
-    image: "/art-installation/1682377305474.jpg",
+    image: "/art-installation/1682377305474__w800.webp",
     description:
       "Immersive and spatial installation works."
   }
