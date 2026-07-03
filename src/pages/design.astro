@@ -41,10 +41,7 @@ function resolveProject(project: DesignProject): DesignProject {
 ---
 
 <Layout title="Design" description="UI/UX and graphic design works organized by discipline." currentPath="/design/">
-    <section class="page-title" aria-labelledby="design-title">
-      <p class="section-kicker">Design</p>
-    </section>
-
+    <h1 class="page-title">Design</h1>
     <div class="design-sections">
       {designSections.map((section) => (
         <section class="design-section">
@@ -80,9 +77,6 @@ function resolveProject(project: DesignProject): DesignProject {
 </Layout>
 
 <style>
-  .page-title {
-    padding: 1rem 0;
-  }
 
   .design-sections {
     display: grid;

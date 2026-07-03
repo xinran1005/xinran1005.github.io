@@ -144,12 +144,18 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
 
   .tile-field {
     width: calc(100% - 22rem);
+    overflow: hidden;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     align-items: center;
     justify-content: center;
     z-index: 2;
   }
+
+  .tile[data-index="0"] { --x: 48%; --y: -20%; --focus-y: -20%; }
+  .tile[data-index="1"] { --x: 52%; --y: 10%; --focus-y: 10%; }
+  .tile[data-index="2"] { --x: 47%; --y: -5%; --focus-y: -5%; }
+  .tile[data-index="3"] { --x: 53%; --y: 15%; --focus-y: 15%; }
 
   .tile {
     --tile-w: clamp(92px, 9vw, 128px);
@@ -174,13 +180,14 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
   .tile.is-active {
     width: var(--active-w);
     height: var(--active-h);
-    transform: translate(var(--focus-x), var(--focus-y));
+    transform: translate(0,var(--focus-y));
     z-index: 3;
   }
 
   .tile-field.is-hovering .tile.is-active {
     width: var(--hover-w);
     height: var(--hover-h);
+    transform: none;
     z-index: 5;
   }
 
@@ -215,7 +222,7 @@ import { contactLinks, navItems, profile, site } from '../data/portfolio';
     max-width: min(70vw, var(--hover-w));
     opacity: 0;
     color: var(--accent);
-    font-family: var(--sans);
+    text-transform: uppercase;
     font-size: clamp(1.1rem, 2vw, 1.45rem);
     line-height: 1;
     pointer-events: none;
