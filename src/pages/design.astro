@@ -61,8 +61,6 @@ function resolveProject(project: DesignProject): DesignProject {
               const p = resolveProject(project);
               return (
                 <MediaCard
-                  type={p.youtubeId || p.src ? 'video' : 'image'}
-                  image={p.image}
                   photos={p.photos}
                   youtubeId={p.youtubeId}
                   src={p.src}

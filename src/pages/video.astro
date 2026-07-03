@@ -10,7 +10,6 @@ import { videoProjects } from '../data/portfolio';
     <section class="video-list" aria-label="Video projects">
       {videoProjects.map((project, index) => (
         <MediaCard
-          type="video"
           youtubeId={project.youtubeId}
           playerId={`player-${index}`}
           title={project.title}

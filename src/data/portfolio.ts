@@ -169,7 +169,7 @@ export const photographyAlbums: PhotoAlbum[] = [
 export const artInstallationProjects = [
   {
     title: "Exposure (interactive video)",
-    youtubeId: "bl8YboQVXxo",
+    src: "/art-installation/output.mp4",
     role: "Artist",
     intro:
       "Our interactive art installation, titled \"Exposure,\" aims to convey a powerful message and engage audiences in a heart-wrenching experience. The name \"Exposure\" was chosen deliberately, as it carries a dual meaning: in photography, it refers to the process of capturing an image, while in Chinese culture, it refers to the revealing of hidden things. Our project seeks to visually expose and express emotions and heartbreak through an interactive video installation.",
@@ -189,7 +189,7 @@ export const designSections = [
     projects: [
       {
         title: "SS Global Streaming & Sourcing Worldwide",
-        src: "/Web Design/SS Global Web Design.mp4",
+        src: "/design/SS Global Web Design.mp4",
         status: "Web Design, 2025",
         description:
           "SS Global Streaming & Sourcing Worldwide during The China Import and Export Fair",
@@ -236,7 +236,7 @@ export const designSections = [
       {
         title: "Boat",
         status: "2D Assets Design for VR Game, 2024",
-        src: "/VR Guide.mp4",
+        src: "/design/VR Guide.mp4",
         description:
           "A VR horror puzzle game where the player, a fisherman who reels in a strange doll, becomes trapped in thick fog on an anchored boat. Exploring the boat and following clues reveals the truth behind the dolls and an unpredictable ending.",
         link: "https://www.sfu.ca/siat/showcase/spring-2024-project-showcase/iat-445-boat.html",

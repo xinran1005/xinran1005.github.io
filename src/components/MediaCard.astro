@@ -3,8 +3,6 @@ import PhotoCarousel from './PhotoCarousel.astro';
 import type { Photo } from '../data/portfolio';
 
 export interface Props {
-  type: 'video' | 'image';
-  image?: string;
   photos?: Photo[];
   youtubeId?: string;
   src?: string;
@@ -17,13 +15,13 @@ export interface Props {
   linkLabel?: string;
 }
 
-const { type, image, photos, youtubeId, src, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
+const { type, photos, youtubeId, src, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
 const origin = Astro.url.origin;
 ---
 
 <article class="media-card">
   <div class="media-frame">
-    {type === 'video' && youtubeId && (
+    {youtubeId && (
       <div class="plyr__video-embed" id={playerId}>
         <iframe
           src={`https://www.youtube.com/embed/${youtubeId}?origin=${origin}&iv_load_policy=3&modestbranding=1&playsinline=1&rel=0`}
@@ -33,15 +31,13 @@ const origin = Astro.url.origin;
         ></iframe>
       </div>
     )}
-    {type === 'video' && src && (
+    {src && (
       <video class="plyr__video-embed" id={playerId} playsinline controls>
         <source src={src} type={`video/${src.split('.').pop()}`} />
       </video>
     )}
-    {photos ? (
+    {photos && (
       <PhotoCarousel photos={photos} />
-    ) : (
-      !youtubeId && !src && image && <img src={image} alt="" loading="lazy" />
     )}
   </div>
   <div class="media-copy">
