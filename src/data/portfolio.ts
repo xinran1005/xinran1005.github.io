@@ -191,6 +191,8 @@ export const designSections = [
         title: "SS Global Streaming & Sourcing Worldwide",
         src: "/design/SS Global Web Design.mp4",
         status: "Web Design, 2025",
+        link: "https://streamingshop.com.ar/",
+        linkLabel: "Open Website",
         description:
           "SS Global Streaming & Sourcing Worldwide during The China Import and Export Fair",
         details: [
