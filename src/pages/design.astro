@@ -50,7 +50,7 @@ function resolveProject(project: DesignProject): DesignProject {
     <h1 class="page-title">Design</h1>
     <div class="design-sections">
       {designSections.map((section) => (
-        <section class="design-section">
+        <section class="design-section" aria-label={`${section.title} Design projects`}>
           <div class="section-heading">
             <p class="section-kicker">{section.title}</p>
             <h2>{section.description}</h2>

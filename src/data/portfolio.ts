@@ -23,7 +23,7 @@ export const navItems = [
   {
     title: "Design",
     href: "/design/",
-    image: "/design/poster-2/A4 - 214__w800.webp",
+    image: "/design/poster-2/HF_1__w800.webp",
     description:
       "UI/UX and graphic design projects across digital and print contexts."
   },
@@ -178,6 +178,7 @@ export const artInstallationProjects = [
       "Course: IAT 443 Interactive Video"
     ],
     link: "https://www.sfu.ca/siat/showcase/spring-2023-project-showcase/explore-the-projects/iat-443-exposure.html",
+    linkLabel: "Open Project",
     albumFolder: "art-installation"
   }
 ];

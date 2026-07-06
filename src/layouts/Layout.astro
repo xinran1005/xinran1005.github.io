@@ -27,6 +27,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     <Font cssVariable="--handwritten" />
   </head>
   <body>
+    <a class="skip-link" href="#main-content">Skip to main</a>
     <header class="site-header">
       <a class="brand" href="/" aria-label={`${site.name} home`}>
         <img class="brand-favicon" src="/favicon.ico" alt="" />
@@ -46,7 +47,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
         ))}
       </nav>
     </header>
-    <main class="page-shell">
+    <main id="main-content" class="page-shell">
       <slot />
     </main>
     <footer class="site-footer">
@@ -74,6 +75,23 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
 </html>
 
 <style is:global>
+  .skip-link {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 100;
+    padding: 0.5rem 1rem;
+    background: var(--accent);
+    color: var(--paper);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .skip-link:focus {
+    top: 0;
+  }
+
   *, *::before, *::after {
     box-sizing: border-box;
   }

@@ -72,7 +72,7 @@ const albums: ResolvedAlbum[] = photographyAlbums
 
 <Layout title="Photography" description="Photography works organized into themed albums." currentPath="/photography/">
     <h1 class="page-title">Photography</h1>
-    <section class="albums" aria-label="Photography albums">
+    <nav class="albums" aria-label="Photography albums">
       {albums.map((album) => (
         <a class="album-card" href={`#album-${album.id}`}>
           <img src={album.cover} alt="" />
@@ -82,7 +82,7 @@ const albums: ResolvedAlbum[] = photographyAlbums
           </span>
         </a>
       ))}
-    </section>
+    </nav>
 
     {albums.map((album) =>
       album.children ? (

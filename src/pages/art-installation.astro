@@ -40,7 +40,6 @@ function resolveProject(project: any) {
         const p = resolveProject(project);
         return (
           <MediaCard
-            type="video"
             src={p.src}
             photos={p.photos}
             playerId={`player-${index}`}
@@ -49,7 +48,7 @@ function resolveProject(project: any) {
             description={p.intro}
             details={p.details}
             link={p.link}
-            linkLabel="View project"
+            linkLabel={p.linkLabel}
           />
         );
       })}
