@@ -42,7 +42,7 @@ const origin = Astro.url.origin;
   </div>
   <div class="media-copy">
     <p class="section-kicker">{kicker}</p>
-    <h2>{title}</h2>
+    <h3>{title}</h3>
     <div class="expand-content">
       <p>{description}</p>
       {details && details.length > 0 && details.map((detail) => <p class="detail">{detail}</p>)}
@@ -86,7 +86,7 @@ const origin = Astro.url.origin;
     display: block;
   }
 
-  .media-copy h2 {
+  .media-copy h3 {
     margin: 0;
     font-family: var(--serif);
     font-size: clamp(2rem, 5vw, 4rem);

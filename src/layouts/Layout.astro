@@ -38,7 +38,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
           <>
             {i > 0 && <span class="nav-sep" aria-hidden="true">/</span>}
             <a
-              href={item.href}
+              href={currentPath === item.href ? '#' : item.href}
               aria-current={currentPath === item.href ? 'page' : undefined}
             >
               {item.title}
@@ -50,6 +50,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     <main id="main-content" class="page-shell">
       <slot />
     </main>
+    {currentPath !== '/' && <BackToTop />}
     <footer class="site-footer">
       <nav aria-label="Contact links">
         {contactLinks.map((link) => (
@@ -69,7 +70,6 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
       </nav>
       <p>&copy; 2026 {site.name}</p>
     </footer>
-    {currentPath !== '/' && <BackToTop />}
   </body>
 
 </html>
@@ -113,6 +113,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
   }
 
   body {
+    position: relative;
     margin: 0;
     min-height: 100vh;
     background: var(--bg);

@@ -1,37 +1,42 @@
-<a class="back-to-top" href="#" aria-label="Back to top">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 8L8 3l-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-</a>
+<div class="scroll-top">
+  <a class="back-to-top" href="#" aria-label="Back to top">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13 10.5L8 5.5L3 10.5" stroke="currentColor" stroke-width="1.5"/></svg>
+  </a>
+</div>
 
 <style>
-  @keyframes show-top-btn {
-    from { opacity: 0; pointer-events: none; }
-    to { opacity: 1; pointer-events: auto; }
+  .scroll-top {
+    position: absolute;
+    top: 100vh;
+    bottom: 2rem;
+    right: 2rem;
   }
 
   .back-to-top {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 85vh;
     z-index: 50;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
+    width: 3rem;
+    height: 3rem;
     border-radius: 50%;
     border: 1px solid var(--line);
     background: color-mix(in srgb, var(--bg) 88%, transparent);
     backdrop-filter: blur(18px);
     color: var(--muted);
     text-decoration: none;
-    opacity: 0;
-    pointer-events: none;
-    animation: show-top-btn linear both;
-    animation-timeline: scroll(root);
-    animation-range: 250px 350px;
   }
 
   .back-to-top:hover {
     color: var(--accent);
+  }
+
+  @media (max-width: 760px) {
+    .scroll-top{
+      display: none;
+    }
   }
 </style>

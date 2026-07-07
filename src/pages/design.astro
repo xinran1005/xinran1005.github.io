@@ -52,8 +52,8 @@ function resolveProject(project: DesignProject): DesignProject {
       {designSections.map((section) => (
         <section class="design-section" aria-label={`${section.title} Design projects`}>
           <div class="section-heading">
-            <p class="section-kicker">{section.title}</p>
-            <h2>{section.description}</h2>
+            <h2 class="section-kicker">{section.title}</h2>
+            <p>{section.description}</p>
           </div>
 
           <div class="design-list">
@@ -103,10 +103,13 @@ function resolveProject(project: DesignProject): DesignProject {
   }
 
   .section-heading h2 {
+    font-weight: normal;
+  }
+
+  .section-heading p {
     margin: 0;
     font-family: var(--serif);
-    font-size: clamp(1.8rem, 4vw, 3.5rem);
-    font-weight: 400;
+    font-size: 2rem;
     line-height: 1.05;
     text-align: end;
   }
