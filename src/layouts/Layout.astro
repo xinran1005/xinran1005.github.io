@@ -46,6 +46,12 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
           </>
         ))}
       </nav>
+      <button class="hamburger" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
     </header>
     <main id="main-content" class="page-shell">
       <slot />
@@ -67,9 +73,15 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
             {link.label}
           </a>
         ))}
+        <span>&copy; 2026 {site.name}</span>
       </nav>
-      <p>&copy; 2026 {site.name}</p>
     </footer>
+    <script is:inline>
+      const hamburger = document.querySelector('.hamburger');
+      hamburger?.addEventListener('click', () => {
+        document.documentElement.classList.toggle('nav-open');
+      });
+    </script>
   </body>
 
 </html>
@@ -203,6 +215,44 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     color: var(--accent);
   }
 
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .hamburger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--muted);
+    border-radius: 1px;
+    transition: transform 200ms ease, opacity 200ms ease;
+  }
+
+  .nav-open .hamburger span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .nav-open .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-open .hamburger span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  .nav-open .hamburger:hover span {
+    background: var(--accent);
+  }
+
   .nav-sep {
     color: var(--line);
     pointer-events: none;
@@ -220,7 +270,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     color: var(--muted);
   }
 
-  .site-footer p {
+  .site-footer span {
     margin: 0;
     font-size: 0.8rem;
   }
@@ -301,10 +351,36 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
   }
 
   @media (max-width: 640px) {
-    .site-header {
-      height: auto;
-      align-items: flex-start;
+    .site-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
       flex-direction: column;
+      padding: 0.5rem clamp(1rem, 4vw, 3rem) 1rem;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, var(--line) 70%, transparent);
+      backdrop-filter: blur(18px);
+      gap: 0;
+    }
+
+    .site-nav a {
+      display: block;
+      padding: 0.5rem 0;
+      font-size: 0.9rem;
+    }
+
+    .nav-sep {
+      display: none;
+    }
+
+    .nav-open .site-nav {
+      display: flex;
+    }
+
+    .hamburger {
+      display: flex;
     }
 
     .site-footer {
