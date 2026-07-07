@@ -1,46 +1,38 @@
-# Astro Starter Kit: Basics
+# Xinran Han — Portfolio
+
+Personal portfolio site for Xinran Han, an interactive design specialist and independent producer working across video, photography, and design.
+
+Built with [Astro](https://astro.build).
+
+## Pages
+
+- **Home** — `/`
+- **Video** — `/video/`
+- **Photography** — `/photography/`
+- **Design** — `/design/`
+- **Art Installation** — `/art-installation/`
+
+## Development
 
 ```sh
-npm create astro@latest -- --template basics
+npm run dev          # Start dev server
+npm run build        # Generate WebP images + build site
+npm run preview      # Preview production build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Project Structure
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```
+src/
+├── assets/          # Fonts, audio
+├── components/      # Reusable components
+├── data/            # Site metadata and portfolio content
+├── layouts/         # Layout.astro (shared shell)
+└── pages/           # Route pages (6)
+public/              # Static assets (images, videos, SVGs)
+scripts/             # WebP generation pipeline
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Deployment
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Deployed to GitHub Pages via `.github/workflows/deploy.yml`.
