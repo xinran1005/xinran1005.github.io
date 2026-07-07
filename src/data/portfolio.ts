@@ -80,7 +80,7 @@ export const videoProjects = [
           "This documentary is based on the poem “An Existence That We Can Call Home” by poet James Kim. This poem explores the history behind the establishment of the park as one of Vancouver's most famous viewpoints, but only a few people know the history behind this viewpoint. Our team is a group of international students who knows very little about the history of Canada, especially the dark side that is related to the indigenous people. After coming to Vancouver, we were shocked by the report of how the Canadian Indian residential school system works and how indigenous people have been treated during past decades. When our group knows the history of the construction of the park, we feel inexplicably sad while standing on the land, and thinking about the past and future of the people who lost their homes forever. Everyone needs to be in a community, a place that they can call home, and a sense of belonging. For those who have less power, and have been relocated without personal intention, the only thing we can do is protect their stories from being forgotten. As a group of creators that always seek truth, we believe that we should use the skills we learned to memorize those tragedies for those people in minor and vulnerable situations, and we have abilities to do that. ",
           "My team's response combined the creative process with the reflection of me, the director, about my opinion of the definition of home. We were thinking and talking about homes, and we walked around Chinatown and Little Italy to look at people's lives who moved to other countries away from their original homes. Each of them has a unique reason why they moved to another country, might be looking for a new way of living, working hard for their dreams, or leaving their homes unwilling. The people moved to an unfamiliar land, and they formed a new gathering place. We used a clip from “American beauty,\" a garbage bag that flowed with the wind. I think that when people are thinking about where their homes and belongings are, it reminds me of this garbage bag. Walk in circles, repeat, and have no ideas where to go and where the destination is."
     ],
-    link: "https://www.youtube.com/watch?v=G7zBiNgmKqk"
+    link: "https://www.sfu.ca/siat/showcase/fall-2022-project-showcase/explore-the-projects/iat-344-an-existence-that-we-can-call-home.html"
   },
   {
     title: "Butterfly in Stomach",
@@ -99,7 +99,7 @@ export const videoProjects = [
       'The music software we use is Cubasis and Logic Pro. The final music is called “heart”. This song has some repeat melody with the sound of heartbeat and wind. In the part close to the end, there is a little sense of dramatic conflict',
       'Hope this track will give you a heartbeat and stomach-churning too.'
     ],
-    link: "https://www.youtube.com/watch?v=8hXpgYRkxsI"
+    link: "https://www.sfu.ca/siat/showcase/spring-2023-project-showcase/explore-the-projects/iat-340-butterfly-in-stomach.html"
   }
 ];
 
@@ -169,7 +169,7 @@ export const photographyAlbums: PhotoAlbum[] = [
 export const artInstallationProjects = [
   {
     title: "Exposure (interactive video)",
-    src: "/art-installation/output.mp4",
+    src: "/art-installation/Exposure.mp4",
     role: "Artist",
     intro:
       "Our interactive art installation, titled \"Exposure,\" aims to convey a powerful message and engage audiences in a heart-wrenching experience. The name \"Exposure\" was chosen deliberately, as it carries a dual meaning: in photography, it refers to the process of capturing an image, while in Chinese culture, it refers to the revealing of hidden things. Our project seeks to visually expose and express emotions and heartbreak through an interactive video installation.",
@@ -178,7 +178,6 @@ export const artInstallationProjects = [
       "Course: IAT 443 Interactive Video"
     ],
     link: "https://www.sfu.ca/siat/showcase/spring-2023-project-showcase/explore-the-projects/iat-443-exposure.html",
-    linkLabel: "Open Project",
     albumFolder: "art-installation"
   }
 ];
@@ -207,8 +206,7 @@ export const designSections = [
         status: "Web Design, 2023",
         description:
           "A six-week project exploring poster design and microsite development for the Holland Festival. The microsite targets users seeking comprehensive artist resources before the festival, emphasizing creative process, artistry, and unique ideas with external links to artist websites.",
-        link: "https://www.youtube.com/watch?v=XwoyeREdLf4",
-        linkLabel: "Open on YouTube",
+        link: "https://www.sfu.ca/siat/showcase/fall-2023-project-showcase/explore-the-projects/iat-235-holland-festival.html",
         details: [
           "Simon Fraser University, School of Interactive Arts and Technology 2023 Fall",
           "Prof: Russell Taylor | TA: Dennis Limbo, Nafira Waili, Paul Brokenshire",
@@ -221,7 +219,7 @@ export const designSections = [
   {
     title: "Graphic",
     description:
-      "Print, cover, and motion-support assets for visual communication.",
+      "Print, cover, and motion-support assets for visual expression.",
     projects: [
       {
         title: "SS Global Streaming & Sourcing Worldwide",
@@ -242,8 +240,7 @@ export const designSections = [
         youtubeId: "STZkvb6hW6A",
         description:
           "Animation video by: Xinran Han, Yuncheng Chen, Tim Chen, Zhengyao Zhu. In a world that only exists square, robot 447 has accidentally created a sphere.",
-        link: "https://www.sfu.ca/siat/showcase/fall-2023-project-showcase/explore-the-projects/iat-343-mortal.html",
-        linkLabel: "Open Project"
+        link: "https://www.sfu.ca/siat/showcase/fall-2023-project-showcase/explore-the-projects/iat-343-mortal.html"
       },
       {
         title: "Boat",
@@ -252,7 +249,6 @@ export const designSections = [
         description:
           "A VR horror puzzle game where the player, a fisherman who reels in a strange doll, becomes trapped in thick fog on an anchored boat. Exploring the boat and following clues reveals the truth behind the dolls and an unpredictable ending.",
         link: "https://www.sfu.ca/siat/showcase/spring-2024-project-showcase/iat-445-boat.html",
-        linkLabel: "Open Project",
         details: [
           "By: Xinran Han, Walter (Qiaohui) Xu, Ethan Allwood, Ningzhi (Koni) Tai",
           "Blends elements of horror and puzzle-solving to deliver a heart-pounding experience exploring fear and human emotion."

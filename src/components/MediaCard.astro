@@ -32,7 +32,7 @@ const origin = Astro.url.origin;
       </div>
     )}
     {src && (
-      <video class="plyr__video-embed" id={playerId} playsinline controls>
+      <video class="plyr__video-embed" id={playerId} playsinline controls data-poster={src.replace(/\.(mp4)$/i, '__w800.webp')}>
         <source src={src} type={`video/${src.split('.').pop()}`} />
       </video>
     )}
