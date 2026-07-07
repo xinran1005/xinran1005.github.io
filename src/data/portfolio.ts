@@ -237,15 +237,24 @@ export const designSections = [
         description: "Poster work for Holland Festival"
       },
       {
+        title: "Mortal",
+        status: "Art director, 2D Assets Designer",
+        youtubeId: "STZkvb6hW6A",
+        description:
+          "Animation video by: Xinran Han, Yuncheng Chen, Tim Chen, Zhengyao Zhu. In a world that only exists square, robot 447 has accidentally created a sphere.",
+        link: "https://www.sfu.ca/siat/showcase/fall-2023-project-showcase/explore-the-projects/iat-343-mortal.html",
+        linkLabel: "Open Project"
+      },
+      {
         title: "Boat",
-        status: "2D Assets Design for VR Game, 2024",
+        status: "Art director, 2D Assets Designer",
         src: "/design/VR Guide.mp4",
         description:
           "A VR horror puzzle game where the player, a fisherman who reels in a strange doll, becomes trapped in thick fog on an anchored boat. Exploring the boat and following clues reveals the truth behind the dolls and an unpredictable ending.",
         link: "https://www.sfu.ca/siat/showcase/spring-2024-project-showcase/iat-445-boat.html",
         linkLabel: "Open Project",
         details: [
-          "Team: Xinran Han, Walter (Qiaohui) Xu, Ethan Allwood, Ningzhi (Koni) Tai",
+          "By: Xinran Han, Walter (Qiaohui) Xu, Ethan Allwood, Ningzhi (Koni) Tai",
           "Blends elements of horror and puzzle-solving to deliver a heart-pounding experience exploring fear and human emotion."
         ]
       },
