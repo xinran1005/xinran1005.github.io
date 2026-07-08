@@ -144,6 +144,11 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     color: inherit;
   }
 
+  .plyr {
+    --plyr-color-main: var(--accent);
+    height: 100%;
+  }
+
   button,
   input {
     font: inherit;
@@ -226,6 +231,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     border: none;
     background: transparent;
     cursor: pointer;
+    overflow: hidden;
   }
 
   .hamburger span {
@@ -234,7 +240,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     height: 2px;
     background: var(--muted);
     border-radius: 1px;
-    transition: transform 200ms ease, opacity 200ms ease;
+    transition: transform 200ms ease;
   }
 
   .nav-open .hamburger span:nth-child(1) {
@@ -242,7 +248,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
   }
 
   .nav-open .hamburger span:nth-child(2) {
-    opacity: 0;
+    transform: scaleX(0);
   }
 
   .nav-open .hamburger span:nth-child(3) {

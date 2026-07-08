@@ -86,7 +86,7 @@ const albums: ResolvedAlbum[] = photographyAlbums
 
     {albums.map((album) =>
       album.children ? (
-        <div class="parent-album" id={`album-${album.id}`}>
+        <section class="parent-album" id={`album-${album.id}`}>
           <div class="parent-album-heading">
             <h2 class="parent-album-title">{album.title}</h2>
             <p>{album.description}</p>
@@ -105,7 +105,7 @@ const albums: ResolvedAlbum[] = photographyAlbums
           {album.children.map((child) => (
             <PhotoGallery album={{ ...child, showName: album.showName || child.showName }} />
           ))}
-        </div>
+        </section>
       ) : (
         <PhotoGallery album={album} />
       )
