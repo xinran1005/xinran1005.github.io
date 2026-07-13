@@ -32,26 +32,6 @@ const { photos, alt } = Astro.props;
     ))}
   </div>
 
-  <dialog class="lightbox" aria-label="Photo viewer">
-    <button class="lightbox-close" type="button" aria-label="Close photo viewer">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
-      <span>Close</span>
-    </button>
-    <div class="lightbox-nav">
-      <button class="lightbox-prev" type="button" aria-label="Previous photo">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-        <span>Prev</span>
-      </button>
-      <button class="lightbox-next" type="button" aria-label="Next photo">
-        <span>Next</span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-      </button>
-    </div>
-    <div class="polaroid">
-      <img src="" alt="" />
-    </div>
-    <p class="lightbox-counter"></p>
-  </dialog>
 </div>
 
 <style>
@@ -144,113 +124,6 @@ const { photos, alt } = Astro.props;
     background: rgba(255, 253, 250, 0.75);
   }
 
-  .lightbox {
-    width: min(1000px, calc(100% - 2rem));
-    border: 0;
-    padding: 1rem;
-    background: transparent;
-  }
-
-  .lightbox::backdrop {
-    background: rgba(21, 19, 15, 0.85);
-  }
-
-  .lightbox[open] {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-template-rows: auto 1fr auto;
-    gap: 0.8rem;
-    align-items: center;
-  }
-
-  .lightbox .polaroid {
-    grid-column: 2;
-    grid-row: 2;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .lightbox .polaroid img {
-    display: block;
-    max-height: 70vh;
-    width: auto;
-    max-width: 100%;
-  }
-
-  .lightbox-nav {
-    display: contents;
-  }
-
-  .lightbox button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--ink);
-    cursor: pointer;
-    padding: 0.55rem 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.72rem;
-    white-space: nowrap;
-    transition: color 180ms ease;
-  }
-
-  .lightbox button:hover {
-    color: var(--accent);
-  }
-
-  .lightbox-prev {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .lightbox-next {
-    grid-column: 3;
-    grid-row: 2;
-  }
-
-  .lightbox .lightbox-close {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    justify-self: end;
-  }
-
-  .lightbox-counter {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    margin: 0;
-    color: var(--muted);
-    text-align: center;
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 680px) {
-    .lightbox[open] {
-      gap: 0.5rem;
-      padding: 0.5rem;
-    }
-
-    .lightbox .polaroid img {
-      max-height: 75vh;
-    }
-
-    .lightbox-prev,
-    .lightbox-next {
-      width: 2.2rem;
-      height: 2.2rem;
-      border-radius: 50%;
-      padding: 0;
-      justify-content: center;
-    }
-
-    .lightbox-prev span,
-    .lightbox-next span {
-      display: none;
-    }
-  }
 </style>
 
 <script>
@@ -264,12 +137,6 @@ const { photos, alt } = Astro.props;
     const prevBtn = el.querySelector('.carousel-prev');
     const nextBtn = el.querySelector('.carousel-next');
     const dots = el.querySelectorAll('.carousel-dot');
-    const dialog = el.querySelector('.lightbox');
-    const lightboxImg = dialog?.querySelector('.polaroid img');
-    const counter = dialog?.querySelector('.lightbox-counter');
-    const closeBtn = dialog?.querySelector('.lightbox-close');
-    const lightboxPrev = dialog?.querySelector('.lightbox-prev');
-    const lightboxNext = dialog?.querySelector('.lightbox-next');
 
     if (!track || originalSlides.length === 0) return;
     const total = originalSlides.length;
@@ -306,24 +173,14 @@ const { photos, alt } = Astro.props;
     }
     track.addEventListener('transitionend', handleTransitionEnd);
 
-    function lockScroll(lock) {
-      document.body.style.overflow = lock ? 'hidden' : '';
-    }
-
-    function showLightbox(index) {
-      if (!dialog || !lightboxImg || !counter || images.length === 0) return;
-      current = (index + images.length) % images.length;
-      lightboxImg.src = images[current].dataset.srcOriginal || images[current].src;
-      counter.textContent = `${current + 1} / ${images.length}`;
-      if (!dialog.open) {
-        lockScroll(true);
-        dialog.showModal();
-      }
-    }
-
     images.forEach((img, i) => {
       img.style.cursor = 'zoom-in';
-      img.addEventListener('click', () => showLightbox(i));
+      img.addEventListener('click', () => {
+        const photos = [...images].map((el) => ({ srcOriginal: el.dataset.srcOriginal || el.src }));
+        document.dispatchEvent(new CustomEvent('open-lightbox', {
+          detail: { photos, index: i, showName: false },
+        }));
+      });
     });
 
     prevBtn?.addEventListener('click', () => go(current - 1));
@@ -348,35 +205,6 @@ const { photos, alt } = Astro.props;
         go(current + (dx < 0 ? 1 : -1));
       }
     }, { passive: true });
-
-    closeBtn?.addEventListener('click', () => { dialog?.close(); lockScroll(false); });
-    lightboxPrev?.addEventListener('click', () => showLightbox(current - 1));
-    lightboxNext?.addEventListener('click', () => showLightbox(current + 1));
-    dialog?.addEventListener('click', (event) => {
-      if (event.target === dialog) { dialog.close(); lockScroll(false); }
-    });
-    dialog?.addEventListener('close', () => lockScroll(false));
-    document.addEventListener('keydown', (event) => {
-      if (!dialog?.open) return;
-      if (event.key === 'ArrowLeft') showLightbox(current - 1);
-      if (event.key === 'ArrowRight') showLightbox(current + 1);
-    });
-
-    if (dialog) {
-      let lbTouchStartX = 0;
-      let lbTouchStartY = 0;
-      dialog.addEventListener('touchstart', (e) => {
-        lbTouchStartX = e.changedTouches[0].screenX;
-        lbTouchStartY = e.changedTouches[0].screenY;
-      }, { passive: true });
-      dialog.addEventListener('touchend', (e) => {
-        const dx = e.changedTouches[0].screenX - lbTouchStartX;
-        const dy = e.changedTouches[0].screenY - lbTouchStartY;
-        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) {
-          showLightbox(current + (dx < 0 ? 1 : -1));
-        }
-      }, { passive: true });
-    }
 
     let autoTimer = null;
     const AUTO_INTERVAL = 4000;

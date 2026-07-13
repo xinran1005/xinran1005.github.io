@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { photographyAlbums, type Photo, type PhotoAlbum } from '../data/portfolio';
 
 const photosDir = path.join(process.cwd(), 'public', 'photography');
@@ -10,10 +11,9 @@ const photosUrl = '/photography';
 
 function toPhoto(f: string, folder: string): Photo {
   const url = `${photosUrl}/${folder}/${f}`;
-  const isJpgPng = /\.(jpe?g|png)$/i.test(f);
   return {
-    src: isJpgPng ? url.replace(/\.(jpe?g|png)$/i, '__w800.webp') : url,
-    srcOriginal: url,
+    src: url,
+    srcOriginal: url.replace('__w800', ''),
   };
 }
 
@@ -33,7 +33,7 @@ function resolveAlbum(album: PhotoAlbum): ResolvedAlbum | null {
     if (!fs.existsSync(dir)) return null;
     const files = fs
       .readdirSync(dir)
-      .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f) && !f.includes('__w800'))
+      .filter((f) => f.includes('__w800'))
       .sort();
     if (files.length === 0) return null;
     return {
@@ -110,6 +110,8 @@ const albums: ResolvedAlbum[] = photographyAlbums
         <PhotoGallery album={album} />
       )
     )}
+
+    <Lightbox padding={true}/>
 </Layout>
 
 <style>

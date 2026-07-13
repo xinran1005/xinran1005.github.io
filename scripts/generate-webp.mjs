@@ -3,7 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const PUBLIC_DIR = path.join(process.cwd(), 'public');
-const MAX_WIDTH = 800;
+const THUMBNAIL_WIDTH = 800;
+const MAX_WIDTH = 2000;
 
 async function processDirectory(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -20,27 +21,33 @@ async function processDirectory(dir) {
 
 async function processImage(filePath) {
   const ext = path.extname(filePath);
-  const webpPath = filePath.replace(new RegExp(`\\${ext}$`), '__w800.webp');
+  const resizedPath = filePath.replace(new RegExp(`\\${ext}$`), '__w800.webp');
+  const losslessPath = filePath.replace(new RegExp(`\\${ext}$`), '.webp');
 
-  if (fs.existsSync(webpPath)) {
-    const srcStat = fs.statSync(filePath);
-    const webpStat = fs.statSync(webpPath);
-    if (webpStat.mtimeMs >= srcStat.mtimeMs) {
-      return;
-    }
-  }
+  const srcStat = fs.statSync(filePath);
+
+  const needsRegenerate = (outPath) => !fs.existsSync(outPath) || fs.statSync(outPath).mtimeMs < srcStat.mtimeMs;
 
   try {
-    const image = sharp(filePath);
-    const metadata = await image.metadata();
-    const width = Math.min(MAX_WIDTH, metadata.width);
+    const metadata = await sharp(filePath).metadata();
+    const thumbnailWidth = Math.min(THUMBNAIL_WIDTH, metadata.width);
+    const maxWidth = Math.min(MAX_WIDTH, metadata.width);
 
-    await image
-      .resize({ width, withoutEnlargement: true })
-      .webp({ quality: 80 })
-      .toFile(webpPath);
+    if (needsRegenerate(resizedPath)) {
+      await sharp(filePath)
+        .resize({ width: thumbnailWidth, withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(resizedPath);
+      console.log(`Generated: ${path.relative(PUBLIC_DIR, resizedPath)}`);
+    }
 
-    console.log(`Generated: ${path.relative(PUBLIC_DIR, webpPath)}`);
+    if (needsRegenerate(losslessPath)) {
+      await sharp(filePath)
+        .resize({ width: maxWidth, withoutEnlargement: true })
+        .webp({ quality: 85 })
+        .toFile(losslessPath);
+      console.log(`Generated: ${path.relative(PUBLIC_DIR, losslessPath)}`);
+    }
   } catch (err) {
     console.error(`Failed: ${filePath} — ${err.message}`);
   }

@@ -37,7 +37,7 @@ export const navItems = [
 ];
 
 export const profile = {
-  avatar: "/user_avatar.jpg",
+  avatar: "/user_avatar.webp",
   intro:
     "I am an Interactive Design Specialist and Independent Producer, driven by a love for ongoing innovation, researching digital art domains to uncover more blended creative opportunities."
 };
@@ -223,14 +223,14 @@ export const designSections = [
     projects: [
       {
         title: "SS Global Streaming & Sourcing Worldwide",
-        albumFolder: "design/poster-1",
+        albumFolder: "poster-1",
         status: "Poster Design, 2026",
         description:
           "SS Global Streaming & Sourcing Worldwide during The China Import and Export Fair"
       },
       {
         title: "Holland Festival",
-        albumFolder: "design/poster-2",
+        albumFolder: "poster-2",
         status: "Poster Design, 2023",
         description: "Poster work for Holland Festival"
       },
@@ -256,7 +256,7 @@ export const designSections = [
       },
       {
         title: "Dieter Rams",
-        albumFolder: "design/slides",
+        albumFolder: "slides",
         status: "slides design",
         description:
           "By: Xinran Han, Mariam Yarkova, Chris Moon, Lynn"

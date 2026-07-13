@@ -4,14 +4,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import Layout from '../layouts/Layout.astro';
 import MediaCard from '../components/MediaCard.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { artInstallationProjects, type Photo } from '../data/portfolio';
 
-function toPhoto(f: string, folder: string): Photo {
-  const url = `/${folder}/${f}`;
-  const isJpgPng = /\.(jpe?g|png)$/i.test(f);
+function toPhoto(f: string): Photo {
+  const url = `${f}`;
   return {
-    src: isJpgPng ? url.replace(/\.(jpe?g|png)$/i, '__w800.webp') : url,
-    srcOriginal: url,
+    src: url,
+    srcOriginal: url.replace('__w800', ''),
   };
 }
 
@@ -21,7 +21,7 @@ function resolveProject(project: any) {
     if (fs.existsSync(dir)) {
       const files = fs
         .readdirSync(dir)
-        .filter((f) => /\.(jpe?g|png|webp|gif)$/i.test(f) && !f.includes('__w800'))
+        .filter((f) => f.includes('__w800'))
         .sort();
       if (files.length > 0) {
         return { ...project, photos: files.map((f) => toPhoto(f, project.albumFolder)) };
@@ -53,6 +53,7 @@ function resolveProject(project: any) {
         );
       })}
     </section>
+    <Lightbox/>
 </Layout>
 
 <style>

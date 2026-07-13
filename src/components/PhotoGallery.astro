@@ -28,32 +28,9 @@ const sectionId = `album-${album.id}`;
       </button>
     ))}
   </div>
-
-  <dialog class="lightbox" aria-label="Photo viewer">
-    <div class="lightbox-body">
-      <div class="polaroid">
-        <img src="" alt="" />
-        <p class="name"></p>
-      </div>
-      <p class="counter"></p>
-      <button class="close lightboxbutton" type="button" aria-label="Close photo viewer">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5"/></svg>
-        <span>Close</span>
-      </button>
-      <button class="previous lightboxbutton" type="button" aria-label="Previous photo">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-        <span>Prev</span>
-      </button>
-      <button class="next lightboxbutton" type="button" aria-label="Next photo">
-        <span>Next</span>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.5"/></svg>
-      </button>
-    </div>
-  </dialog>
 </section>
 
 <style>
-
   .album-section {
     scroll-margin-top: 3.5rem;
     margin-bottom: 3rem;
@@ -116,129 +93,6 @@ const sectionId = `album-${album.id}`;
     outline: 3px solid var(--accent);
     outline-offset: 4px;
   }
-
-  .lightbox {
-    width: min(1000px, calc(100% - 2rem));
-    border: 0;
-    padding: 0;
-    background: transparent;
-  }
-
-  .lightbox::backdrop {
-    background: rgba(21, 19, 15, 0.85);
-  }
-
-  .lightbox[open] {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .lightbox-body {
-    position: relative;
-    width: 100%;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .lightbox .polaroid {
-    position: relative;
-    background: #fff;
-    padding: 1rem 1rem 3rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  }
-
-  .lightbox .polaroid img {
-    display: block;
-    max-height: 70vh;
-    width: auto;
-    max-width: 100%;
-    margin: 0 auto;
-  }
-
-  .lightbox button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border: 1px solid var(--line);
-    background: #fff;
-    color: var(--ink);
-    cursor: pointer;
-    padding: 0.55rem 0.7rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    font-size: 0.72rem;
-    white-space: nowrap;
-    transition: color 180ms ease;
-  }
-
-  .lightbox button:hover {
-    color: var(--accent);
-  }
-
-  .lightbox .close {
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-
-  .previous {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    translate: 0 -50%;
-  }
-
-  .next {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    translate: 0 -50%;
-  }
-
-  .counter {
-    position: absolute;
-    top: .9rem;
-    left: 50%;
-    translate: -50% 0;
-    margin: 0rem;
-    color: var(--muted);
-    font-size: 0.8rem;
-  }
-
-  .name {
-    position: absolute;
-    bottom: 0.6rem;
-    left: 1rem;
-    right: 1rem;
-    margin: 0;
-    color: var(--ink);
-    font-family: var(--handwritten), cursive;
-    font-size: 1.5rem;
-    line-height: 1;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    text-align: center;
-  }
-
-  @media (max-width: 680px) {
-    .name {
-      font-size: 1rem;
-    }
-
-    .lightbox .close {
-      top: 0;
-      right: 0;
-    }
-
-    .lightboxbutton span{
-      display: none;
-    }
-  }
 </style>
 
 <script>
@@ -246,68 +100,17 @@ const sectionId = `album-${album.id}`;
     if (section.dataset.init) return;
     section.dataset.init = '';
 
-    const buttons = [...section.querySelectorAll('.photo-button')];
-    const dialog = section.querySelector('.lightbox');
-    const image = dialog?.querySelector('img');
-    const counter = dialog?.querySelector('.counter');
-    const name = dialog?.querySelector('.name');
-    const close = dialog?.querySelector('.close');
-    const previous = dialog?.querySelector('.previous');
-    const next = dialog?.querySelector('.next');
+    const photos = [...section.querySelectorAll('.photo-button')].map((btn) => ({
+      srcOriginal: btn.dataset.src,
+    }));
     const showName = section.hasAttribute('data-show-name');
-    let current = 0;
-    let loading = false;
 
-    function show(index) {
-      if (!dialog || !image || !counter || buttons.length === 0) return;
-      if (loading) return;
-      const next = (index + buttons.length) % buttons.length;
-      if (image.src !== buttons[next].dataset.src) {
-        loading = true;
-        current = next;
-        const src = buttons[current].dataset.src || '';
-        image.src = src;
-      }
-      if (!dialog.open) {
-        const scrollY = window.scrollY;
-        document.documentElement.style.overflow = 'hidden';
-        dialog.showModal();
-        window.scrollTo(0, scrollY);
-      }
-    }
-
-    function updateInfo() {
-      loading = false;
-      if (counter) counter.textContent = `${current + 1} / ${buttons.length}`;
-      const src = buttons[current]?.dataset?.src || '';
-      if (name) name.textContent = showName ? (src.split('/').pop() || '').replace(/\.\w+$/, '') : '';
-    }
-
-    image?.addEventListener('load', updateInfo);
-    image?.addEventListener('error', updateInfo);
-
-    function closeDialog() {
-      dialog?.close();
-      document.documentElement.style.overflow = '';
-    }
-
-    buttons.forEach((button, index) => {
-      button.addEventListener('click', () => show(index));
-    });
-
-    close?.addEventListener('click', closeDialog);
-    previous?.addEventListener('click', () => show(current - 1));
-    next?.addEventListener('click', () => show(current + 1));
-    dialog?.addEventListener('click', (event) => {
-      if (event.target === dialog) { closeDialog(); }
-    });
-    dialog?.addEventListener('close', () => {
-      document.documentElement.style.overflow = '';
-    });
-    document.addEventListener('keydown', (event) => {
-      if (!dialog?.open) return;
-      if (event.key === 'ArrowLeft') show(current - 1);
-      if (event.key === 'ArrowRight') show(current + 1);
+    section.querySelectorAll('.photo-button').forEach((button, index) => {
+      button.addEventListener('click', () => {
+        document.dispatchEvent(new CustomEvent('open-lightbox', {
+          detail: { photos, index, showName },
+        }));
+      });
     });
   });
 </script>
