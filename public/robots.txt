@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://xinran1005.github.io/sitemap-0.xml
