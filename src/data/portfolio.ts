@@ -53,11 +53,11 @@ export const contactLinks = [
     href: "https://www.instagram.com/reyn.ran/",
     ariaLabel: "Xinran Han on Instagram"
   },
-  {
-  label: "SoundCloud",
-  href: "https://soundcloud.com/",
-  ariaLabel: "Xinran Han on SoundCloud"
-  },
+  // {
+  // label: "SoundCloud",
+  // href: "https://soundcloud.com/",
+  // ariaLabel: "Xinran Han on SoundCloud"
+  // },
   {
     label: "Email",
     href: "mailto:xinranh100599@gmail.com",

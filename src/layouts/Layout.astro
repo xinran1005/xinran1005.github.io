@@ -58,7 +58,7 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
     <main id="main-content" class="page-shell">
       <slot />
     </main>
-    {currentPath !== '/' && <BackToTop />}
+    {currentPath !== '/' && <BackToTop />
     <footer class="site-footer">
       <nav aria-label="Contact links">
         {contactLinks.map((link) => (
@@ -70,14 +70,14 @@ const pageTitle = title === site.title ? title : `${title} | ${site.name}`;
           >
             {link.label === 'LinkedIn' && <span class="contact-icon" data-icon="linkedin"></span>}
             {link.label === 'Instagram' && <span class="contact-icon" data-icon="instagram"></span>}
-            {link.label === 'SoundCloud' && <span class="contact-icon" data-icon="soundcloud"></span>}
+            {/* {link.label === 'SoundCloud' && <span class="contact-icon" data-icon="soundcloud"></span>} */}
             {link.label === 'Email' && <span class="contact-icon" data-icon="mail"></span>}
             {link.label}
           </a>
         ))}
         <span>&copy; 2026 {site.name}</span>
       </nav>
-    </footer>
+    </footer>}
     <script is:inline>
       const hamburger = document.querySelector('.hamburger');
       hamburger?.addEventListener('click', () => {
