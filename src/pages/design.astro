@@ -82,6 +82,12 @@ function resolveProject(project: DesignProject): DesignProject {
 
 <style>
 
+  h2.section-kicker {
+    font-size: 1.2rem;
+    font-weight: normal;
+    margin: 0;
+  }
+
   .design-sections {
     display: grid;
     gap: 3rem
@@ -97,7 +103,7 @@ function resolveProject(project: DesignProject): DesignProject {
     display: grid;
     grid-template-columns: minmax(160px, 0.3fr) minmax(0, 1fr);
     gap: 1rem;
-    align-items: start;
+    align-items: center;
     border-top: 1px solid var(--line);
     padding-top: 1.2rem;
   }
@@ -118,7 +124,7 @@ function resolveProject(project: DesignProject): DesignProject {
 
   @media (max-width: 640px) {
     .section-heading {
-      grid-template-columns: 1fr;
+      grid-template-columns: 25% auto;
     }
   }
 </style>

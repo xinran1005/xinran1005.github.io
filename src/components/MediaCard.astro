@@ -42,10 +42,12 @@ const origin = Astro.url.origin;
   <div class="media-copy">
     <p class="section-kicker">{kicker}</p>
     <h3>{title}</h3>
-    <div class="expand-content">
-      <p>{description}</p>
-      {details && details.length > 0 && details.map((detail) => <p class="detail">{detail}</p>)}
-    </div>
+    {description && (
+      <div class="expand-content">
+        <p>{description}</p>
+        {details && details.length > 0 && details.map((detail) => <p class="detail">{detail}</p>)}
+      </div>
+    )}
     <div class="actions-row">
       {details && details.length > 0 && (
         <label class="more-btn" aria-label="Toggle details">

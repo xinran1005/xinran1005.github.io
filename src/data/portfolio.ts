@@ -202,7 +202,7 @@ export const artInstallationProjects = [
 export const designSections = [
   {
     title: "UI/UX",
-    description: "Digital experience studies across web and app interfaces.",
+    description: "Digital experience studies across web and app interfaces",
     projects: [
       {
         title: "SS Global Streaming & Sourcing Worldwide",
@@ -242,7 +242,7 @@ export const designSections = [
   {
     title: "Graphic",
     description:
-      "Print, cover, and motion-support assets for visual expression.",
+      "Print, cover, and motion-support assets for visual expression",
     projects: [
       {
         title: "SS Global Streaming & Sourcing Worldwide",
