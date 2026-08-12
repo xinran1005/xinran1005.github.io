@@ -1,6 +1,6 @@
 ---
 import PhotoCarousel from './PhotoCarousel.astro';
-import type { Photo } from '../data/portfolio';
+import type { Photo, ProjectLink } from '../data/portfolio';
 
 export interface Props {
   photos?: Photo[];
@@ -11,11 +11,10 @@ export interface Props {
   kicker: string;
   description: string;
   details?: string[];
-  link?: string;
-  linkLabel?: string;
+  links?: ProjectLink[];
 }
 
-const { type, photos, youtubeId, src, playerId, title, kicker, description, details, link, linkLabel } = Astro.props;
+const { type, photos, youtubeId, src, playerId, title, kicker, description, details, links } = Astro.props;
 const origin = Astro.url.origin;
 ---
 
@@ -55,7 +54,7 @@ const origin = Astro.url.origin;
           <span class="close-text">[close]</span>
         </label>
       )}
-      {link && <a href={link} target="_blank" rel="noopener noreferrer">{linkLabel || 'Open project'}</a>}
+      {links && links.map((l) => <a href={l.href} target="_blank" rel="noopener noreferrer">{l.label || 'Open project'}</a>)}
     </div>
   </div>
 </article>
