@@ -45,7 +45,7 @@ export const profile = {
 export const contactLinks = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/xinran-h-03667926b/",
+    href: "https://www.linkedin.com/in/xinranh05/",
     ariaLabel: "Xinran Han on LinkedIn"
   },
   {
